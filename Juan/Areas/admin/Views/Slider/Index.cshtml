@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Slider>
+<!-- Page Heading -->
+<h1 class="h3 mb-2 text-gray-800">Sliders Table</h1>
+
+<a class="btn btn-primary mt-4 mb-4" href="/manage/slider/create">Create a slider</a>
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Sliders</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Title</th>
+                        <th>Sub Title</th>
+                        <th>Description</th>
+                        <th>Created At</th>
+                        <th>Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Slider slider in Model)
+                    {
+                        <tr>
+                            <td>@slider.Id</td>
+                            <td>@slider.Title</td>
+                            <td>@slider.SubTitle</td>
+                            <td>@slider.Description</td>
+                            <td>@slider.CreatedAt.ToShortDateString()</td>
+                            <td>
+                                <a class="btn btn-secondary" href="/admin/slider/update/@slider.Id">update</a>
+                                <a class="btn btn-secondary" href="/admin/slider/delete/@slider.Id">delete</a>
+                                <a class="btn btn-secondary" href="/admin/slider/detail/@slider.Id">detail</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @await Html.PartialAsync("_PaginationPartial")
+</div>
