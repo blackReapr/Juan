@@ -5,7 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContext<JuanDbContext>(options => options.UseSqlServer("Server=DESKTOP-HQQO0R9\\SQLEXPRESS;Database=AllUpDB;Trusted_Connection=Yes;TrustServerCertificate=True"));
+builder.Services.AddDbContext<JuanDbContext>(options => options.UseSqlServer("Server=JUPITER18\\MAINDB;Database=AllUpDB;Trusted_Connection=Yes;TrustServerCertificate=True"));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,0 +1,45 @@
+﻿@model Product
+<form enctype="multipart/form-data" method="post">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" placeholder="Enter category name">
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" placeholder="Enter category name">
+        <span class="text-danger" asp-validation-for="Description"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control" placeholder="Enter category name">
+        <span class="text-danger" asp-validation-for="Price"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="DiscountPrice"></label>
+        <input asp-for="DiscountPrice" class="form-control" placeholder="Enter category name">
+        <span class="text-danger" asp-validation-for="DiscountPrice"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Count"></label>
+        <input asp-for="Count" class="form-control" placeholder="Enter category name">
+        <span class="text-danger" asp-validation-for="Count"></span>
+    </div>
+    <div id="fileInput" class="form-group">
+        <label asp-for="MainPhoto"></label>
+        <input asp-for="MainPhoto" class="form-control" accept="image/*">
+        <span class="text-danger" asp-validation-for="MainPhoto"></span>
+    </div>
+    <div id="fileInput" class="form-group">
+        <label asp-for="HoverPhoto"></label>
+        <input asp-for="HoverPhoto" class="form-control" accept="image/*">
+        <span class="text-danger" asp-validation-for="HoverPhoto"></span>
+    </div>
+    <div id="fileInput" class="form-group">
+        <label asp-for="Photos"></label>
+        <input asp-for="Photos" class="form-control" accept="image/*">
+        <span class="text-danger" asp-validation-for="Photos"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

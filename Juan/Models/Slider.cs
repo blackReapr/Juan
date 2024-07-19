@@ -11,7 +11,7 @@ public class Slider : BaseEntity
     public string SubTitle { get; set; }
     [Required]
     public string Description { get; set; }
-    public string Image { get; set; }
+    public string? Image { get; set; }
     [NotMapped]
     public IFormFile Photo { get; set; }
 }
