@@ -158,7 +158,7 @@
                                                                 <a href="my-account.html">my-account</a>
                                                             </li>
                                                             <li>
-                                                                <a href="login-register.html">login-register</a>
+                                                                <a asp-controller="authentication" asp-action="login">login</a>
                                                             </li>
                                                             <li>
                                                                 <a href="contact-us.html">contact us</a>
@@ -282,9 +282,16 @@
                                                 <i class="ion-ios-gear-outline"></i>
                                             </a>
                                             <ul class="dropdown-list">
-                                                <li><a href="login-register.html">login</a></li>
-                                                <li><a href="login-register.html">register</a></li>
-                                                <li><a href="my-account.html">my account</a></li>
+                                                @if (User.Identity.IsAuthenticated)
+                                                {
+                                                    <li><a asp-controller="account" asp-action="index">my account</a></li>
+                                                    <li><a asp-controller="authentication" asp-action="logout">logout</a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li><a asp-controller="authentication" asp-action="login">login</a></li>
+                                                    <li><a asp-controller="authentication" asp-action="register">register</a></li>
+                                                }
                                             </ul>
                                         </li>
                                         <li>
@@ -417,7 +424,10 @@
                                         <ul class="dropdown">
                                             <li><a href="my-account.html">my-account</a></li>
                                             <li>
-                                                <a href="login-register.html">login-register</a>
+                                                <a asp-controller="authentication" asp-action="login">login</a>
+                                            </li>
+                                            <li>
+                                                <a asp-controller="authentication" asp-action="register">register</a>
                                             </li>
                                             <li><a href="contact-us.html">contact us</a></li>
                                         </ul>
@@ -538,10 +548,10 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="myaccount">
                                     <a class="dropdown-item" href="my-account.html">my account</a>
-                                    <a class="dropdown-item" href="login-register.html">
+                                    <a class="dropdown-item" asp-controller="authentication" asp-action="login">
                                         login
                                     </a>
-                                    <a class="dropdown-item" href="login-register.html">register</a>
+                                    <a class="dropdown-item" asp-controller="authentication" asp-action="register">register</a>
                                 </div>
                             </div>
                         </li>
@@ -580,101 +590,8 @@
         @RenderBody()
     </main>
     <!-- main wrapper end -->
-    <!-- Quick view modal start -->
     <div class="modal" id="quick_view">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">
-                        &times;
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <!-- product details inner end -->
-                    <div class="product-details-inner">
-                        <div class="row">
-                            <div class="col-lg-5">
-                                <div class="product-large-slider mb-20">
-                                    <div class="pro-large-img img-zoom">
-                                        <img src="~/assets/img/product/product-details-img1.jpg"
-                                             alt="product thumb" />
-                                    </div>
-                                    <div class="pro-large-img img-zoom">
-                                        <img src="~/assets/img/product/product-details-img2.jpg"
-                                             alt="product thumb" />
-                                    </div>
-                                    <div class="pro-large-img img-zoom">
-                                        <img src="~/assets/img/product/product-details-img3.jpg"
-                                             alt="product thumb" />
-                                    </div>
-                                    <div class="pro-large-img img-zoom">
-                                        <img src="~/assets/img/product/product-details-img4.jpg"
-                                             alt="product thumb" />
-                                    </div>
-                                </div>
-                                <div class="pro-nav slick-row-5">
-                                    <div class="pro-nav-thumb">
-                                        <img src="~/assets/img/product/product-details-img1.jpg"
-                                             alt="" />
-                                    </div>
-                                    <div class="pro-nav-thumb">
-                                        <img src="~/assets/img/product/product-details-img2.jpg"
-                                             alt="" />
-                                    </div>
-                                    <div class="pro-nav-thumb">
-                                        <img src="~/assets/img/product/product-details-img3.jpg"
-                                             alt="" />
-                                    </div>
-                                    <div class="pro-nav-thumb">
-                                        <img src="~/assets/img/product/product-details-img4.jpg"
-                                             alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-7">
-                                <div class="product-details-des">
-                                    <h3 class="pro-det-title">Primitive Mens Premium Shoes</h3>
-                                    <div class="pro-review">
-                                        <span><a href="#">1 Review(s)</a></span>
-                                    </div>
-                                    <div class="price-box">
-                                        <span class="regular-price">$70.00</span>
-                                        <span class="old-price"><del>$80.00</del></span>
-                                    </div>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                                        sed diam nonumy eirmod tempor invidunt ut labore et dolore
-                                        magna aliquyam erat, sed diam voluptua.
-                                    </p>
-                                    <div class="quantity-cart-box d-flex align-items-center mb-20">
-                                        <div class="quantity">
-                                            <div class="pro-qty">
-                                                <input type="text" value="1" />
-                                            </div>
-                                        </div>
-                                        <a href="cart.html" class="btn btn-default">Add To Cart</a>
-                                    </div>
-                                    <div class="availability mb-20">
-                                        <h5 class="cat-title">Availability:</h5>
-                                        <span>In Stock</span>
-                                    </div>
-                                    <div class="share-icon">
-                                        <h5 class="cat-title">Share:</h5>
-                                        <a href="#"><i class="fa fa-facebook"></i></a>
-                                        <a href="#"><i class="fa fa-twitter"></i></a>
-                                        <a href="#"><i class="fa fa-pinterest"></i></a>
-                                        <a href="#"><i class="fa fa-google-plus"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- product details inner end -->
-                </div>
-            </div>
-        </div>
     </div>
-    <!-- Quick view modal end -->
     <!-- Start Footer Area Wrapper -->
     <footer class="footer-wrapper">
         <!-- footer main area start -->
@@ -898,6 +815,12 @@
     <script src="~/assets/js/plugins.js"></script>
     <!--=== Active Js ===-->
     <script src="~/assets/js/active.js"></script>
+
+    <!--=== Jquery validation ===-->
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.3/jquery.validate.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js" integrity="sha512-xq+Vm8jC94ynOikewaQXMEkJIOBp7iArs3IhFWSWdRT3Pq8wFz46p+ZDFAR7kHnSFf+zUv52B3prRYnbDRdgog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    @RenderSection("Scripts", false)
 </body>
 
 <!-- Mirrored from demo.hasthemes.com/juan-preview-v1/juan/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 07 Mar 2021 22:36:53 GMT -->

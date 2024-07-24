@@ -2,7 +2,6 @@
 using Juan.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Juan;
 
@@ -10,7 +9,11 @@ public static class ServiceRegistration
 {
     public static void Register(this IServiceCollection services, ConfigurationManager configuration)
     {
-        services.AddDbContext<JuanDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("Default")));
+        services.AddSingleton<Interceptor>();
+        services.AddDbContext<JuanDbContext>((sp, options) => options
+        .UseSqlServer(configuration
+        .GetConnectionString("Default"))
+        .AddInterceptors(sp.GetRequiredService<Interceptor>()));
         services.AddControllersWithViews();
         services.AddSession();
         services.AddIdentity<AppUser, IdentityRole>(options =>

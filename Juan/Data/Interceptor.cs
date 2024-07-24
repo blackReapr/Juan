@@ -1,18 +1,30 @@
 ﻿using Juan.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Juan.Data;
 
 public class Interceptor : SaveChangesInterceptor
 {
-    public override InterceptionResult<int> SavingChanges(DbContextEventData eventData, InterceptionResult<int> result)
+    public override ValueTask<InterceptionResult<int>> SavingChangesAsync(DbContextEventData eventData, InterceptionResult<int> result, CancellationToken cancellationToken = default)
     {
         if (eventData.Context is not null)
         {
-            eventData.Context.ChangeTracker.Entries<BaseEntity>().Where(e => e.State == EntityState.Modified).ToList().ForEach(e => e.Entity.UpdatedAt=DateTime.Now);
-            eventData.Context.ChangeTracker.Entries<BaseEntity>().Where(e => e.State == EntityState.Added).ToList().ForEach(e => e.Entity.CreatedAt=DateTime.Now);
+            var entities = eventData.Context.ChangeTracker.Entries<BaseEntity>().ToList();
+            foreach (EntityEntry<BaseEntity> entry in entities)
+            {
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.CreatedAt = DateTime.Now;
+                }
+
+                if (entry.State == EntityState.Modified)
+                {
+                    entry.Entity.UpdatedAt = DateTime.Now;
+                }
+            }
         }
-        return base.SavingChanges(eventData, result);
+        return base.SavingChangesAsync(eventData, result, cancellationToken);
     }
 }

@@ -1,0 +1,101 @@
+﻿@model Product
+<!-- Quick view modal start -->
+<div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                &times;
+            </button>
+        </div>
+        <div class="modal-body">
+            <!-- product details inner end -->
+            <div class="product-details-inner">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <div class="product-large-slider mb-20">
+                            @foreach (ProductImage productImage in Model.ProductImages)
+                            {
+                                <div class="pro-large-img img-zoom">
+                                    <img src="~/assets/img/product/@productImage.Image"
+                                         alt="@Model.Name" />
+                                </div>
+                            }
+                        </div>
+                        <div class="pro-nav slick-row-5">
+                            @foreach (ProductImage productImage in Model.ProductImages)
+                            {
+                                <div class="pro-nav-thumb">
+                                    <img src="~/assets/img/product/@productImage.Image"
+                                         alt="@Model.Name" />
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="product-details-des">
+                            <h3 class="pro-det-title">@Model.Name</h3>
+                            <div class="pro-review">
+                                <span><a href="#">1 Review(s)</a></span>
+                            </div>
+                            <div class="price-box">
+                                @if (Model.DiscountPrice > 0)
+                                {
+                                    <span class="regular-price">$@Model.DiscountPrice.ToString("0.00")</span>
+                                    <span class="old-price"><del>$@Model.Price.ToString("0.00")</del></span>
+                                }
+                                else
+                                {
+                                    <span class="regular-price">$@Model.Price.ToString("0.00")</span>
+                                }
+                            </div>
+                            <p>
+                                @Model.Description
+                            </p>
+                            <div class="quantity-cart-box d-flex align-items-center mb-20">
+                                <div class="quantity">
+                                    <div class="pro-qty">
+                                        <input type="text" value="1" />
+                                    </div>
+                                </div>
+                                <a href="cart.html" class="btn btn-default">Add To Cart</a>
+                            </div>
+                            <div class="availability mb-20">
+                                <h5 class="cat-title">Availability:</h5>
+                                @if (Model.Count > 0)
+                                {
+                                    <span class="text-success">In Stock</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">Out Of Stock</span>
+                                }
+                            </div>
+                            <div class="share-icon">
+                                <h5 class="cat-title">Share:</h5>
+                                <a href="https://www.facebook.com"><i class="fa fa-facebook"></i></a>
+                                <a href="https://x.com"><i class="fa fa-twitter"></i></a>
+                                <a href="https://www.pinterest.com"><i class="fa fa-pinterest"></i></a>
+                                <a href="#"><i class="fa fa-google-plus"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- product details inner end -->
+        </div>
+    </div>
+</div>
+<!-- Quick view modal end -->
+@section Scripts {
+    <script>
+        (function ($) {
+            "use strict";
+            // prodct details slider active
+            $('.product-large-slider').slick({
+                fade: true,
+                arrows: false,
+                asNavFor: '.pro-nav'
+            });
+        })
+    </script>
+}

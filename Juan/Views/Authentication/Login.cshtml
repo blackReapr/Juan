@@ -1,14 +1,15 @@
-﻿<!-- breadcrumb area start -->
-<div class="breadcrumb-area bg-img" data-bg="assets/img/banner/breadcrumb-banner.jpg">
+﻿@model LoginVM
+<!-- breadcrumb area start -->
+<div class="breadcrumb-area bg-img" data-bg="/assets/img/banner/breadcrumb-banner.jpg">
     <div class="container">
         <div class="row">
             <div class="col-12">
                 <div class="breadcrumb-wrap text-center">
                     <nav aria-label="breadcrumb">
-                        <h1 class="breadcrumb-title">Login-Register</h1>
+                        <h1 class="breadcrumb-title">Login</h1>
                         <ul class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Login-Register</li>
+                            <li class="breadcrumb-item"><a asp-controller="home" asp-action="index">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Login</li>
                         </ul>
                     </nav>
                 </div>
@@ -17,35 +18,44 @@
     </div>
 </div>
 <!-- breadcrumb area end -->
+<div class="container">
+    <div class="row text-danger small justify-content-center">
+        @Html.ValidationMessage("Error")
+    </div>
+</div>
 <!-- login register wrapper start -->
 <div class="login-register-wrapper section-padding">
     <div class="container">
         <div class="member-area-from-wrap">
-            <div class="row">
+            <div class="row justify-content-center">
                 <!-- Login Content Start -->
                 <div class="col-lg-6">
                     <div class="login-reg-form-wrap">
                         <h2>Sign In</h2>
-                        <form action="#" method="post">
+                        <form method="post">
                             <div class="single-input-item">
-                                <input type="email" placeholder="Email or Username" required />
+                                <label asp-for="UsernameOrEmail"></label>
+                                <input asp-for="UsernameOrEmail" placeholder="Email or Username" />
+                                <span class="text-danger small" asp-validation-for="UsernameOrEmail"></span>
                             </div>
                             <div class="single-input-item">
-                                <input type="password" placeholder="Enter your Password" required />
+                                <label asp-for="Password"></label>
+                                <input asp-for="Password" placeholder="Enter your Password" />
+                                <span class="text-danger small" asp-validation-for="Password"></span>
                             </div>
                             <div class="single-input-item">
                                 <div class="login-reg-form-meta d-flex align-items-center justify-content-between">
                                     <div class="remember-meta">
                                         <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="rememberMe">
-                                            <label class="custom-control-label" for="rememberMe">Remember Me</label>
+                                            <input asp-for="RememberMe" class="custom-control-input">
+                                            <label class="custom-control-label" asp-for="RememberMe"></label>
                                         </div>
                                     </div>
-                                    <a href="#" class="forget-pwd">Forget Password?</a>
+                                    <a asp-action="forgotpassword" class="forget-pwd">Forget Password?</a>
                                 </div>
                             </div>
                             <div class="single-input-item">
-                                <button class="btn">Login</button>
+                                <button type="submit" class="btn">Login</button>
                             </div>
                         </form>
                     </div>

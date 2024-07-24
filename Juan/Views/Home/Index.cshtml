@@ -10,7 +10,7 @@
                         <!-- single slider item start -->
                         <div class="hero-single-slide">
                             <div class="hero-slider-item bg-img"
-                                    data-bg="/assets/img/slider/@slider.Image">
+                                 data-bg="/assets/img/slider/@slider.Image">
                                 <div class="hero-slider-content slide-1">
                                     <h5 class="slide-subtitle">@slider.SubTitle</h5>
                                     <h2 class="slide-title">New @slider.Title</h2>
@@ -122,10 +122,10 @@
                                     <a href="#" data-toggle="tooltip" title="Wishlist">
                                         <i class="ion-android-favorite-outline"></i>
                                     </a>
-                                    <a href="#" data-toggle="tooltip" title="Add To Cart">
+                                    <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" data-toggle="tooltip" title="Add To Cart">
                                         <i class="ion-bag"></i>
                                     </a>
-                                    <a href="#" data-toggle="modal" data-target="#quick_view">
+                                    <a asp-controller="product" asp-action="modal" asp-route-id="@product.Id" class="modalBtn" data-toggle="modal" data-target="#quick_view">
                                         <span data-toggle="tooltip" title="Quick View">
                                             <i class="ion-ios-eye-outline"></i>
                                         </span>
@@ -149,7 +149,7 @@
                 <div class="img-container mt-30">
                     <a href="product-details.html">
                         <img src="~/assets/img/banner/banner-1.jpg"
-                                alt="banner-image" />
+                             alt="banner-image" />
                     </a>
                     <div class="banner-text">
                         <h5 class="banner-subtitle">sports shoes</h5>
@@ -161,7 +161,7 @@
                 <div class="img-container mt-30">
                     <a href="product-details.html">
                         <img src="~/assets/img/banner/banner-2.jpg"
-                                alt="banner-image" />
+                             alt="banner-image" />
                     </a>
                     <div class="banner-text">
                         <h5 class="banner-subtitle">sports shoes</h5>
@@ -191,7 +191,7 @@
                 <div class="product-banner">
                     <a href="#">
                         <img src="~/assets/img/banner/banner-3.jpg"
-                                alt="product banner" />
+                             alt="product banner" />
                     </a>
                 </div>
             </div>
@@ -199,55 +199,55 @@
                 <div class="top-seller-carousel slick-row-15 mtn-30">
                     @foreach (Product product in Model.NewProducts)
                     {
-                    <!-- product item start -->
-                    <div class="slide-item">
-                        <div class="pro-item-small mt-30">
-                            <div class="product-thumb">
-                                <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
-                                    <img src="~/assets/img/product/@product.MainImage" alt="@product.Name" />
-                                </a>
-                            </div>
-                            <div class="pro-small-content">
-                                <h6 class="product-name">
-                                    <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">@product.Name</a>
-                                </h6>
-                                <div class="price-box">
-                                    @if (product.DiscountPrice > 0)
-                                    {
-                                        <span class="price-regular">$@product.DiscountPrice.ToString("0.00")</span>
-                                        <span class="price-old"><del>$@product.Price.ToString("0.00")</del></span>
-                                    }
-                                    else
-                                    {
-                                        <span class="price-regular">$@product.Price.ToString("0.00")</span>
-                                    }
-                                    </div>
-                                <div class="ratings">
-                                    <span><i class="ion-android-star"></i></span>
-                                    <span><i class="ion-android-star"></i></span>
-                                    <span><i class="ion-android-star"></i></span>
-                                    <span><i class="ion-android-star"></i></span>
-                                    <span><i class="ion-android-star"></i></span>
+                        <!-- product item start -->
+                        <div class="slide-item">
+                            <div class="pro-item-small mt-30">
+                                <div class="product-thumb">
+                                    <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
+                                        <img src="~/assets/img/product/@product.MainImage" alt="@product.Name" />
+                                    </a>
                                 </div>
-                                <div class="product-link-2">
-                                    <a href="#" data-toggle="tooltip" title="Wishlist">
-                                        <i class="ion-android-favorite-outline"></i>
-                                    </a>
-                                    <a href="#" data-toggle="tooltip" title="Add To Cart">
-                                        <i class="ion-bag"></i>
-                                    </a>
-                                    <a href="#"
-                                        data-toggle="modal"
-                                        data-target="#quick_view">
-                                        <span data-toggle="tooltip" title="Quick View">
-                                            <i class="ion-ios-eye-outline"></i>
-                                        </span>
-                                    </a>
+                                <div class="pro-small-content">
+                                    <h6 class="product-name">
+                                        <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">@product.Name</a>
+                                    </h6>
+                                    <div class="price-box">
+                                        @if (product.DiscountPrice > 0)
+                                        {
+                                            <span class="price-regular">$@product.DiscountPrice.ToString("0.00")</span>
+                                            <span class="price-old"><del>$@product.Price.ToString("0.00")</del></span>
+                                        }
+                                        else
+                                        {
+                                            <span class="price-regular">$@product.Price.ToString("0.00")</span>
+                                        }
+                                    </div>
+                                    <div class="ratings">
+                                        <span><i class="ion-android-star"></i></span>
+                                        <span><i class="ion-android-star"></i></span>
+                                        <span><i class="ion-android-star"></i></span>
+                                        <span><i class="ion-android-star"></i></span>
+                                        <span><i class="ion-android-star"></i></span>
+                                    </div>
+                                    <div class="product-link-2">
+                                        <a href="#" data-toggle="tooltip" title="Wishlist">
+                                            <i class="ion-android-favorite-outline"></i>
+                                        </a>
+                                        <a href="#" data-toggle="tooltip" title="Add To Cart">
+                                            <i class="ion-bag"></i>
+                                        </a>
+                                        <a href="#"
+                                           data-toggle="modal"
+                                           data-target="#quick_view">
+                                            <span data-toggle="tooltip" title="Quick View">
+                                                <i class="ion-ios-eye-outline"></i>
+                                            </span>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- product item start -->
+                        <!-- product item start -->
                     }
                 </div>
             </div>
@@ -338,3 +338,97 @@
     </div>
 </div>
 <!-- brand area end -->
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js" integrity="sha512-JSCFHhKDilTRRXe9ak/FJ28dcpOJxzQaCd3Xg8MyF6XFjODhy/YMCM8HW0TFDckNHWUewW+kfvhin43hKtJxAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        $(document).ready(function () {
+            const modalBtns = document.querySelectorAll(".modalBtn");
+            modalBtns.forEach(b => {
+                b.addEventListener("click", async e => {
+                    e.preventDefault();
+                    axios.get(b.getAttribute("href")).then(res => {
+                        document.getElementById("quick_view").innerHTML = res.data;
+
+                        $('.product-large-slider').slick({
+                            fade: true,
+                            arrows: false,
+                            asNavFor: '.pro-nav'
+                        });
+                        // product details slider nav active
+                        $('.pro-nav').slick({
+                            slidesToShow: 4,
+                            asNavFor: '.product-large-slider',
+                            arrows: false,
+                            focusOnSelect: true
+                        });
+                        // testimonial carousel active js
+                        $('.testimonial-active').slick({
+                            dots: true,
+                            arrows: false,
+                            responsive: [
+                                {
+                                    breakpoint: 992,
+                                    settings: {
+                                        dots: false
+                                    }
+                                }
+                            ]
+                        });
+
+
+                        // image zoom effect
+                        $('.img-zoom').zoom();
+
+                        // pricing filter
+                        var rangeSlider = $(".price-range"),
+                            amount = $("#amount"),
+                            minPrice = rangeSlider.data('min'),
+                            maxPrice = rangeSlider.data('max');
+                        rangeSlider.slider({
+                            range: true,
+                            min: minPrice,
+                            max: maxPrice,
+                            values: [minPrice, maxPrice],
+                            slide: function (event, ui) {
+                                amount.val("$" + ui.values[0] + " - $" + ui.values[1]);
+                            }
+                        });
+                        amount.val(" $" + rangeSlider.slider("values", 0) +
+                            " - $" + rangeSlider.slider("values", 1));
+
+
+                        // product view mode change js
+                        $('.product-view-mode a').on('click', function (e) {
+                            e.preventDefault();
+                            var shopProductWrap = $('.shop-product-wrap');
+                            var viewMode = $(this).data('target');
+                            $('.product-view-mode a').removeClass('active');
+                            $(this).addClass('active');
+                            shopProductWrap.removeClass('grid-view list-view').addClass(viewMode);
+                        })
+
+
+                        // quantity change js
+                        $('.pro-qty').prepend('<span class="dec qtybtn">-</span>');
+                        $('.pro-qty').append('<span class="inc qtybtn">+</span>');
+                        $('.qtybtn').on('click', function () {
+                            var $button = $(this);
+                            var oldValue = $button.parent().find('input').val();
+                            if ($button.hasClass('inc')) {
+                                var newVal = parseFloat(oldValue) + 1;
+                            } else {
+                                // Don't allow decrementing below zero
+                                if (oldValue > 1) {
+                                    var newVal = parseFloat(oldValue) - 1;
+                                } else {
+                                    newVal = 1;
+                                }
+                            }
+                            $button.parent().find('input').val(newVal);
+                        });
+                    });
+                })
+            })
+        })
+    </script>
+}
