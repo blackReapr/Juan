@@ -1,11 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Juan.Models;
 
 public class Product : BaseEntity
 {
-    public required string Name { get; set; }
-    public required string Description { get; set; }
+    [Required]
+    public string Name { get; set; }
+    [Required]
+    public string Description { get; set; }
     [Column(TypeName = "money")]
     public decimal Price { get; set; }
     [Column(TypeName = "money")]
@@ -20,4 +23,6 @@ public class Product : BaseEntity
     public IFormFile? HoverPhoto { get; set; }
     [NotMapped]
     public IFormFile[]? Photos { get; set; }
+    public List<ProductSize> ProductSizes { get; set; }
+    public List<ProductColor> ProductColors { get; set; }
 }

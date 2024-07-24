@@ -17,8 +17,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\assets\images\" />
-    <Folder Include="wwwroot\assets\images\" />
+    <None Include="wwwroot\assets\images\9f2644cb-f5d8-4aa7-8e05-e1ef35c65cf6.svg" />
+    <None Include="wwwroot\assets\images\bdb5ecd5-fabd-4f25-8e81-f5531589c482.svg" />
+    <None Include="wwwroot\assets\images\c9af61be-1054-4ac2-b08a-c70beb9217e0.svg" />
   </ItemGroup>
 
 </Project>
