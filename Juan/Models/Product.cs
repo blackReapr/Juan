@@ -15,6 +15,7 @@ public class Product : BaseEntity
     public decimal DiscountPrice { get; set; }
     public int Count { get; set; }
     public string? MainImage { get; set; }
+    public bool IsNew { get; set; }
     public string? HoverImage { get; set; }
     public List<ProductImage>? ProductImages { get; set; }
     [NotMapped]
