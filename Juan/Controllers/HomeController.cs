@@ -19,12 +19,14 @@ namespace Juan.Controllers
         {
             IEnumerable<Slider> sliders = await _context.Sliders.ToListAsync();
             IEnumerable<Product> products = await _context.Products.ToListAsync();
-            IEnumerable<Product> newProducts = await _context.Products.Where(p => p.IsNew).Take(4).ToListAsync();
+            IEnumerable<Product> newProducts = await _context.Products.Where(p => p.IsNew).ToListAsync();
+            IEnumerable<Blog> blogs = await _context.Blogs.Include(b => b.User).ToListAsync();
             HomeVM homeVM = new()
             {
                 Sliders = sliders,
                 Products = products,
-                NewProducts = newProducts
+                NewProducts = newProducts,
+                Blogs = blogs
             };
             return View(homeVM);
         }

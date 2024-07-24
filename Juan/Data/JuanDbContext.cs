@@ -1,9 +1,10 @@
 ﻿using Juan.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Juan.Data;
 
-public class JuanDbContext : DbContext
+public class JuanDbContext : IdentityDbContext<AppUser>
 {
     public DbSet<Slider> Sliders { get; set; }
     public DbSet<Product> Products { get; set; }
