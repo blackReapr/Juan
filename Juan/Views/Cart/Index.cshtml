@@ -1,0 +1,29 @@
+﻿@model IEnumerable<CartVM>
+<!-- breadcrumb area start -->
+<div class="breadcrumb-area bg-img">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-wrap text-center">
+                    <nav aria-label="breadcrumb">
+                        <h1 class="breadcrumb-title">Cart</h1>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a asp-controller="home" asp-action="index">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Cart</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- breadcrumb area end -->
+<!-- cart main wrapper start -->
+<div class="cart-main-wrapper section-padding">
+    <div id="cartContainer" class="container">
+        @{
+            await Html.RenderPartialAsync("_CartIndexPartial");
+        }
+    </div>
+</div>
+<!-- cart main wrapper end -->

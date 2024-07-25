@@ -19,6 +19,20 @@ public class CartController : Controller
         _userManager = userManager;
     }
 
+    public async Task<IActionResult> Index()
+    {
+        IEnumerable<CartVM>? cart = JsonSerializer.Deserialize<IEnumerable<CartVM>>(Request.Cookies["cart"]);
+        if (cart == null) cart = new List<CartVM>();
+        return View(cart);
+    }
+
+    public async Task<IActionResult> CartIndexPartial()
+    {
+        IEnumerable<CartVM>? cart = JsonSerializer.Deserialize<IEnumerable<CartVM>>(Request.Cookies["cart"]);
+        if (cart == null) cart = new List<CartVM>();
+        return PartialView("_CartIndexPartial", cart);
+    }
+
     public async Task<IActionResult> AddToCart(int? id)
     {
         if (id == null) return BadRequest();
@@ -64,19 +78,6 @@ public class CartController : Controller
                 user.CartProducts.Add(newBasket);
             }
             await _context.SaveChangesAsync();
-
-            //foreach (var cartProduct in _context.CartProducts.Include(p => p.User).Include(p => p.Product).Where(p => p.User.NormalizedUserName == user.NormalizedUserName))
-            //{
-            //    CartVM cartVM = new()
-            //    {
-            //        Count = cartProduct.Count,
-            //        Id = cartProduct.ProductId,
-            //        Price = cartProduct.Product.DiscountPrice > 0 ? cartProduct.Product.DiscountPrice : cartProduct.Product.Price,
-            //        Image = cartProduct.Product.MainImage,
-            //        Name = cartProduct.Product.Name,
-            //    };
-            //    cart.Add(cartVM);
-            //}
         }
         HttpContext.Response.Cookies.Append("cart", JsonSerializer.Serialize(cart));
 
@@ -102,6 +103,52 @@ public class CartController : Controller
             _context.CartProducts.Remove(cartProduct);
             await _context.SaveChangesAsync();
         }
+        return PartialView("_CartPartial", cart);
+    }
+
+    public async Task<IActionResult> Decrement(int? id)
+    {
+        if (id == null) return BadRequest();
+        var product = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+        if (product == null) return BadRequest();
+        List<CartVM> cart;
+        string basket = HttpContext.Request.Cookies["cart"];
+        if (string.IsNullOrEmpty(basket)) cart = new();
+        else
+        {
+            cart = JsonSerializer.Deserialize<List<CartVM>>(basket);
+            if (cart.Exists(p => p.Id == id))
+            {
+                var existCart = cart.Find(p => p.Id == id);
+                if (existCart.Count > 1) existCart.Count--;
+                else cart.Remove(existCart);
+            }
+        }
+        if (User.Identity.IsAuthenticated)
+        {
+            AppUser? user = await _userManager.Users.Include(u => u.CartProducts).FirstOrDefaultAsync(u => u.NormalizedUserName == User.Identity.Name.ToUpperInvariant());
+            if (user == null) return BadRequest();
+            if (user.CartProducts.Any(b => b.ProductId == id))
+            {
+                var existCart = user.CartProducts.Find(b => b.ProductId == id);
+                if (existCart.Count > 1) existCart.Count--;
+                else user.CartProducts.Remove(existCart);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                CartProduct newBasket = new()
+                {
+                    ProductId = product.Id,
+                    UserId = user.Id,
+                    Count = 1
+                };
+                user.CartProducts.Add(newBasket);
+            }
+            await _context.SaveChangesAsync();
+        }
+        HttpContext.Response.Cookies.Append("cart", JsonSerializer.Serialize(cart));
+
         return PartialView("_CartPartial", cart);
     }
 }

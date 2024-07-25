@@ -758,13 +758,45 @@
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
-        const removeProduct = id => {
-            axios.delete("/cart/removeproduct/" + id).then(res => {
-                document.querySelector("#cart").innerHTML = res.data;
-                notification.innerHTML = document.querySelectorAll(".minicart-item").length;
-                toastr.success("Product removed from your cart!");
-            })
-        };
+        if (location.href.split("/")[1] != "cart") {
+            const removeProduct = id => {
+                axios.delete("/cart/removeproduct/" + id).then(res => {
+                    document.querySelector("#cart").innerHTML = res.data;
+                    document.querySelector(".notification").innerHTML = document.querySelectorAll(".minicart-item").length;
+                    toastr.success("Product removed from your cart!");
+                })
+            };
+        }
+        else {
+
+            const removeProduct = id => {
+                const notification = document.querySelector(".notification");
+                axios.delete("/cart/removeproduct/" + id).then(res => {
+                    document.querySelector("#cart").innerHTML = res.data;
+                    notification.innerHTML = document.querySelectorAll(".minicart-item").length;
+                    toastr.options = {
+                        'closeButton': true,
+                        'debug': false,
+                        'newestOnTop': false,
+                        'progressBar': false,
+                        'positionClass': 'toast-top-right',
+                        'preventDuplicates': false,
+                        'showDuration': '1000',
+                        'hideDuration': '1000',
+                        'timeOut': '5000',
+                        'extendedTimeOut': '1000',
+                        'showEasing': 'swing',
+                        'hideEasing': 'linear',
+                        'showMethod': 'fadeIn',
+                        'hideMethod': 'fadeOut',
+                    }
+                    toastr.success("Product has successfully been removed from your cart!");
+                    axios.get("/cart/cartindexpartial").then(res => {
+                        document.querySelector("#cartContainer").innerHTML = res.data;
+                    })
+                })
+            }
+        }
     </script>
 
     @RenderSection("Scripts", false)
