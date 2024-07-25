@@ -31,9 +31,9 @@ public class ProductController : Controller
             .Include(p => p.ProductSizes)
             .ThenInclude(s => s.Size)
             .Include(p => p.ProductImages)
+            .Include(p => p.Reviews)
             .FirstOrDefaultAsync(x => x.Id == id);
         if (product == null) return NotFound();
         return View(product);
     }
-
 }

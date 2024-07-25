@@ -1,0 +1,23 @@
+﻿@model IEnumerable<Review>
+@foreach (Review review in Model)
+{
+    <div class="rev-avatar">
+        <img src="~/assets/img/users/@review.User.Image" alt="@review.User.UserName">
+    </div>
+    <div class="review-box">
+        <div class="ratings">
+            @for (int i = 0; i < review.Raiting; i++)
+            {
+                <span class="good"><i class="fa fa-star"></i></span>
+            }
+            @for (int i = 0; i < 5 - review.Raiting; i++)
+            {
+                <span style="color: #e3e3e3"><i class="fa fa-star"></i></span>
+            }
+        </div>
+        <div class="post-author">
+            <p><span>@review.User.UserName -</span> @review.CreatedAt.ToShortDateString()</p>
+        </div>
+        <p>@review.Content</p>
+    </div>
+}

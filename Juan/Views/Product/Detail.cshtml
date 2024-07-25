@@ -139,25 +139,10 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane fade" id="tab_three">
-                                        <form action="#" class="review-form">
-                                            <h5>1 review for <span>@Model.Name</span></h5>
-                                            <div class="total-reviews">
-                                                <div class="rev-avatar">
-                                                    <img src="~/assets/img/about/avatar.jpg" alt="">
-                                                </div>
-                                                <div class="review-box">
-                                                    <div class="ratings">
-                                                        <span class="good"><i class="fa fa-star"></i></span>
-                                                        <span class="good"><i class="fa fa-star"></i></span>
-                                                        <span class="good"><i class="fa fa-star"></i></span>
-                                                        <span class="good"><i class="fa fa-star"></i></span>
-                                                        <span><i class="fa fa-star"></i></span>
-                                                    </div>
-                                                    <div class="post-author">
-                                                        <p><span>admin -</span> 30 Nov, 2018</p>
-                                                    </div>
-                                                    <p>Aliquam fringilla euismod risus ac bibendum. Sed sit amet sem varius ante feugiat lacinia. Nunc ipsum nulla, vulputate ut venenatis vitae, malesuada ut mi. Quisque iaculis, dui congue placerat pretium, augue erat accumsan lacus</p>
-                                                </div>
+                                        <form class="review-form">
+                                            <h5>@(Model.Reviews.Count() == 0 ? "No" : Model.Reviews.Count()) review for <span>@Model.Name</span></h5>
+                                            <div id="reviews" class="total-reviews">
+                                                @await Html.PartialAsync("_ReviewPartial", Model.Reviews)
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col">

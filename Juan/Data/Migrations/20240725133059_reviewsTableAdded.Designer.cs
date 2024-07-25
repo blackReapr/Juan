@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Juan.Data.Migrations
 {
     [DbContext(typeof(JuanDbContext))]
-    [Migration("20240725131903_reviewsTableAdded")]
+    [Migration("20240725133059_reviewsTableAdded")]
     partial class reviewsTableAdded
     {
         /// <inheritdoc />
@@ -362,7 +362,7 @@ namespace Juan.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Review");
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Juan.Models.Size", b =>
