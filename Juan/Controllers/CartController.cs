@@ -26,10 +26,8 @@ public class CartController : Controller
         if (product == null) return BadRequest();
         List<CartVM> cart;
         string basket = HttpContext.Request.Cookies["cart"];
-        if (string.IsNullOrEmpty(basket))
-        {
-            cart = new();
-        }
+        if (string.IsNullOrEmpty(basket)) cart = new();
+
         else
         {
             cart = JsonSerializer.Deserialize<List<CartVM>>(basket);
@@ -67,17 +65,18 @@ public class CartController : Controller
             }
             await _context.SaveChangesAsync();
 
-            foreach (var cartProduct in _context.CartProducts.Include(p => p.User).Include(p => p.Product).Where(p => p.User.NormalizedUserName == user.NormalizedUserName))
-            {
-                CartVM cartVM = new()
-                {
-                    Count = cartProduct.Count,
-                    Id = cartProduct.ProductId,
-                    Price = cartProduct.Product.DiscountPrice > 0 ? cartProduct.Product.DiscountPrice : cartProduct.Product.Price,
-                    Image = cartProduct.Product.MainImage
-                };
-                cart.Add(cartVM);
-            }
+            //foreach (var cartProduct in _context.CartProducts.Include(p => p.User).Include(p => p.Product).Where(p => p.User.NormalizedUserName == user.NormalizedUserName))
+            //{
+            //    CartVM cartVM = new()
+            //    {
+            //        Count = cartProduct.Count,
+            //        Id = cartProduct.ProductId,
+            //        Price = cartProduct.Product.DiscountPrice > 0 ? cartProduct.Product.DiscountPrice : cartProduct.Product.Price,
+            //        Image = cartProduct.Product.MainImage,
+            //        Name = cartProduct.Product.Name,
+            //    };
+            //    cart.Add(cartVM);
+            //}
         }
         HttpContext.Response.Cookies.Append("cart", JsonSerializer.Serialize(cart));
 
@@ -92,7 +91,7 @@ public class CartController : Controller
         if (product == null) return NotFound();
         List<CartVM>? cart = JsonSerializer.Deserialize<List<CartVM>>(Request.Cookies["cart"]);
         if (cart == null) return NotFound();
-        CartVM? existProduct = cart.FirstOrDefault(p => p.Id != product.Id);
+        CartVM? existProduct = cart.FirstOrDefault(p => p.Id == product.Id);
         if (existProduct == null) return NotFound();
         cart.Remove(existProduct);
         HttpContext.Response.Cookies.Append("cart", JsonSerializer.Serialize(cart));

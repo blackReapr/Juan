@@ -26,7 +26,7 @@
                                     <span class="cart-price">$@cartVM.Price.ToString("0.00")</span>
                                 </p>
                             </div>
-                            <button class="minicart-remove" id="@cartVM.Id">
+                            <button class="minicart-remove" id="@cartVM.Id" onclick="removeProduct(@cartVM.Id)">
                                 <i class="ion-android-close"></i>
                             </button>
                         </li>
@@ -62,8 +62,6 @@
                 <a asp-controller="shop" asp-action="index">Go Shopping</a>
             </div>
         }
-
-
     </div>
 </div>
 

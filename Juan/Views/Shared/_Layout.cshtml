@@ -301,7 +301,7 @@
                                             </ul>
                                         </li>
                                         <li>
-                                            <a href="#" class="minicart-btn">
+                                            <a class="minicart-btn" style="cursor: pointer">
                                                 <i class="ion-bag"></i>
                                                 <div class="notification">@cartVM.Count()</div>
                                             </a>
@@ -753,16 +753,13 @@
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.3/jquery.validate.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js" integrity="sha512-xq+Vm8jC94ynOikewaQXMEkJIOBp7iArs3IhFWSWdRT3Pq8wFz46p+ZDFAR7kHnSFf+zUv52B3prRYnbDRdgog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        const removeBtns = document.querySelectorAll(".minicart-remove");
-        removeBtns.forEach(btn => {
-            btn.addEventListener("click", e => {
-                e.preventDefault();
-                axios.delete("/cart/removeproduct/" + btn.id).then(res => {
-                    document.querySelector("#cart").innerHTML = res.data;
-                    notification.innerHTML = document.querySelectorAll(".minicart-item").length;
-                });
+        const removeProduct = id => {
+            axios.delete("/cart/removeproduct/" + id).then(res => {
+                document.querySelector("#cart").innerHTML = res.data;
+                notification.innerHTML = document.querySelectorAll(".minicart-item").length;
+
             })
-        })
+        };
     </script>
 
     @RenderSection("Scripts", false)
