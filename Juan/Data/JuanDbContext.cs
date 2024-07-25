@@ -12,6 +12,12 @@ public class JuanDbContext : IdentityDbContext<AppUser>
     public DbSet<Blog> Blogs { get; set; }
     public DbSet<CartProduct> CartProducts { get; set; }
     public DbSet<Review> Reviews { get; set; }
+    public DbSet<Color> Colors { get; set; }
+    public DbSet<Size> Sizes { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<ProductCategory> ProductCategories { get; set; }
+    public DbSet<ProductSize> ProductSizes { get; set; }
+    public DbSet<ProductColor> ProductColors { get; set; }
     public JuanDbContext(DbContextOptions options) : base(options) { }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
