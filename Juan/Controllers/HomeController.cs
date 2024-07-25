@@ -17,6 +17,21 @@ namespace Juan.Controllers
 
         public async Task<IActionResult> Index()
         {
+            //for (int i = 1; i <= 12; i++)
+            //{
+            //    Product product = new()
+            //    {
+            //        Count = 10,
+            //        Description = $"Description {i}",
+            //        Name = $"Product {i}",
+            //        MainImage = $"product-{i}.jpg",
+            //        IsNew = i % 2 == 0,
+            //        Price = i * 15,
+            //        DiscountPrice = i * 12,
+            //    };
+            //    _context.Products.Add(product);
+            //    await _context.SaveChangesAsync();
+            //}
             IEnumerable<Slider> sliders = await _context.Sliders.ToListAsync();
             IEnumerable<Product> products = await _context.Products.ToListAsync();
             IEnumerable<Product> newProducts = await _context.Products.Where(p => p.IsNew).ToListAsync();

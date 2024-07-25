@@ -10,6 +10,7 @@ public class JuanDbContext : IdentityDbContext<AppUser>
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductImage> ProductImages { get; set; }
     public DbSet<Blog> Blogs { get; set; }
+    public DbSet<CartProduct> CartProducts { get; set; }
     public JuanDbContext(DbContextOptions options) : base(options) { }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

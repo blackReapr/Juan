@@ -1,5 +1,7 @@
 ﻿using Juan.Data;
+using Juan.Interfaces;
 using Juan.Models;
+using Juan.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,6 +18,7 @@ public static class ServiceRegistration
         .AddInterceptors(sp.GetRequiredService<Interceptor>()));
         services.AddControllersWithViews();
         services.AddSession();
+        services.AddScoped<ILayoutService, LayoutService>();
         services.AddIdentity<AppUser, IdentityRole>(options =>
         {
             options.User.RequireUniqueEmail = true;

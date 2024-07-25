@@ -3,6 +3,7 @@ using Juan.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Juan.Controllers;
 
@@ -76,23 +77,22 @@ public class AuthenticationController : Controller
             ModelState.AddModelError("Error", "Verify email.");
             return View(loginVM);
         }
-        //Response.Cookies.Append("cart", "");
-        //if (user.CartProducts != null && user.CartProducts.Count > 0)
-        //{
-        //    List<CartVM> cart = new();
-        //    foreach (var basket in user.Baskets)
-        //    {
-        //        CartVM cartVM = new();
-        //        cartVM.Id = basket.ProductId;
-        //        cartVM.Price = basket.Product.DiscountPrice > 0 ? basket.Product.DiscountPrice : basket.Product.Price;
-        //        cartVM.Count = basket.Count;
-        //        cartVM.ExTax = basket.Product.ExTax;
-        //        cartVM.Image = basket.Product.MainImage;
-        //        cartVM.Name = basket.Product.Name;
-        //        cart.Add(cartVM);
-        //    }
-        //    Response.Cookies.Append("cart", JsonConvert.SerializeObject(cart));
-        //}
+        Response.Cookies.Append("cart", "");
+        if (user.CartProducts != null && user.CartProducts.Count() > 0)
+        {
+            List<CartVM> cart = new();
+            foreach (var basket in user.CartProducts)
+            {
+                CartVM cartVM = new();
+                cartVM.Id = basket.ProductId;
+                cartVM.Price = basket.Product.DiscountPrice > 0 ? basket.Product.DiscountPrice : basket.Product.Price;
+                cartVM.Count = basket.Count;
+                cartVM.Image = basket.Product.MainImage;
+                cartVM.Name = basket.Product.Name;
+                cart.Add(cartVM);
+            }
+            Response.Cookies.Append("cart", JsonConvert.SerializeObject(cart));
+        }
 
         if (returnUrl is null)
             return RedirectToAction("Index", "Home");

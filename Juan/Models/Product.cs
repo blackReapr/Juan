@@ -16,12 +16,9 @@ public class Product : BaseEntity
     public int Count { get; set; }
     public string? MainImage { get; set; }
     public bool IsNew { get; set; }
-    public string? HoverImage { get; set; }
     public List<ProductImage>? ProductImages { get; set; }
     [NotMapped]
     public IFormFile? MainPhoto { get; set; }
-    [NotMapped]
-    public IFormFile? HoverPhoto { get; set; }
     [NotMapped]
     public IFormFile[]? Photos { get; set; }
     public List<ProductSize> ProductSizes { get; set; }

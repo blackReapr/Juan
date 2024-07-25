@@ -122,7 +122,7 @@
                                     <a href="#" data-toggle="tooltip" title="Wishlist">
                                         <i class="ion-android-favorite-outline"></i>
                                     </a>
-                                    <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" data-toggle="tooltip" title="Add To Cart">
+                                    <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" data-toggle="tooltip" title="Add To Cart" class="addToCart">
                                         <i class="ion-bag"></i>
                                     </a>
                                     <a asp-controller="product" asp-action="modal" asp-route-id="@product.Id" class="modalBtn" data-toggle="modal" data-target="#quick_view">
@@ -430,5 +430,18 @@
                 })
             })
         })
+    </script>
+    <script>
+        const btns = document.querySelectorAll(".addToCart");
+        const notification = document.querySelector(".notification");
+        btns.forEach(btn => {
+            btn.addEventListener("click", e => {
+                e.preventDefault();
+                axios.get(btn.getAttribute("href")).then(res => {
+                    document.querySelector("#cart").innerHTML = res.data;
+                    notification.innerHTML = document.querySelectorAll(".minicart-item").length;
+                });
+            });
+        });
     </script>
 }
