@@ -6,11 +6,11 @@
     </div>
     <div class="review-box">
         <div class="ratings">
-            @for (int i = 0; i < review.Raiting; i++)
+            @for (int i = 0; i < review.Rating; i++)
             {
                 <span class="good"><i class="fa fa-star"></i></span>
             }
-            @for (int i = 0; i < 5 - review.Raiting; i++)
+            @for (int i = 0; i < 5 - review.Rating; i++)
             {
                 <span style="color: #e3e3e3"><i class="fa fa-star"></i></span>
             }

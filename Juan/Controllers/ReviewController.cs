@@ -1,6 +1,6 @@
 ﻿using Juan.Data;
-using Juan.Data.Migrations;
 using Juan.Models;
+using Juan.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,28 +28,36 @@ public class ReviewController : Controller
     }
 
     [HttpPost]
-    public async Task<IActionResult> NewReview(Review review, int? id)
+    public async Task<IActionResult> New([FromBody] ReviewVM reviewVM, int? id)
     {
+        string content = reviewVM.Content;
+        int rating = reviewVM.Rating;
         if (id == null) return BadRequest();
         Product? product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
-        if (!ModelState.IsValid) return View(review);
-        if (!User.Identity.IsAuthenticated)
-        {
-            ModelState.AddModelError("Error", "You must be authenticated to post a review.");
-            return View(review);
-        }
+        IDictionary<string, string> errors = new Dictionary<string, string>();
+        if (string.IsNullOrEmpty(content)) errors["content"] = "Content is required";
+        if (rating <= 0 || rating > 5) errors["rating"] = "Invalid rating value";
+
+        if (!User.Identity.IsAuthenticated) errors["user"] = "You must be authenticated to post a review";
+
         AppUser? user = await _userManager.FindByNameAsync(User.Identity.Name);
-        if (user == null)
+        if (user == null) errors["user"] = "You must be authenticated to post a review";
+
+        if (errors.Count > 0)
         {
-            ModelState.AddModelError("Error", "You must be authenticated to post a review.");
-            return View(review);
+            Response.StatusCode = 400;
+            return Json(errors);
         }
+        Review review = new();
         review.UserId = user.Id;
         review.ProductId = product.Id;
-        await _context.Reviews.AddAsync(review);
-        await _context.SaveChangesAsync();
+        review.Rating = rating;
+        review.Content = content;
+        _context.Reviews.Add(review);
         IEnumerable<Review> reviews = await _context.Reviews.Include(r => r.User).Where(r => r.ProductId == product.Id).ToListAsync();
+        reviews = reviews.Append(review);
+        await _context.SaveChangesAsync();
         return PartialView("_ReviewPartial", reviews);
     }
 }

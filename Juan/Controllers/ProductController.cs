@@ -32,6 +32,7 @@ public class ProductController : Controller
             .ThenInclude(s => s.Size)
             .Include(p => p.ProductImages)
             .Include(p => p.Reviews)
+            .ThenInclude(r => r.User)
             .FirstOrDefaultAsync(x => x.Id == id);
         if (product == null) return NotFound();
         return View(product);

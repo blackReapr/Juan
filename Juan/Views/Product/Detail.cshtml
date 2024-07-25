@@ -47,7 +47,7 @@
                             <div class="product-details-des">
                                 <h3 class="pro-det-title">@Model.Name</h3>
                                 <div class="pro-review">
-                                    <span><a href="#">1 Review(s)</a></span>
+                                    <span><a href="#">@Model.Reviews.Count() Review(s)</a></span>
                                 </div>
                                 <div class="price-box">
                                     @if (Model.DiscountPrice > 0)
@@ -120,46 +120,33 @@
                                                 <tr>
                                                     <td>color</td>
                                                     <td>
-                                                        @foreach (var color in Model.ProductColors)
-                                                        {
-                                                            @color.Color.Name
-                                                        }
+                                                        @String.Join(", ", Model.ProductColors.Select(pc => pc.Color.Name))
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td>size</td>
                                                     <td>
-                                                        @foreach (var size in Model.ProductSizes)
-                                                        {
-                                                            @size.Size.Name
-                                                        }
+                                                        @String.Join(", ", Model.ProductSizes.Select(pc => pc.Size.Name))
                                                     </td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="tab-pane fade" id="tab_three">
-                                        <form class="review-form">
-                                            <h5>@(Model.Reviews.Count() == 0 ? "No" : Model.Reviews.Count()) review for <span>@Model.Name</span></h5>
-                                            <div id="reviews" class="total-reviews">
+                                        <form id="reviewForm" class="review-form">
+                                            <h5>
+                                                <span id="reviewCount" style="color:#333333;">
+                                                    @(Model.Reviews.Count() == 0 ? "No" : Model.Reviews.Count())
+                                                </span>
+                                                review(s) for <span>@Model.Name</span>
+                                            </h5>
+                                            <div id="reviews" class="total-reviews flex-column">
                                                 @await Html.PartialAsync("_ReviewPartial", Model.Reviews)
                                             </div>
                                             <div class="form-group row">
                                                 <div class="col">
-                                                    <label class="col-form-label"><span class="text-danger">*</span> Your Name</label>
-                                                    <input type="text" class="form-control" required>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col">
-                                                    <label class="col-form-label"><span class="text-danger">*</span> Your Email</label>
-                                                    <input type="email" class="form-control" required>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col">
-                                                    <label class="col-form-label"><span class="text-danger">*</span> Your Review</label>
-                                                    <textarea class="form-control" required></textarea>
+                                                    <label class="col-form-label" for="content"><span class="text-danger">*</span> Your Review</label>
+                                                    <textarea id="content" class="form-control"></textarea>
                                                     <div class="help-block pt-10"><span class="text-danger">Note:</span> HTML is not translated!</div>
                                                 </div>
                                             </div>
@@ -208,7 +195,7 @@
                                     <div class="product-item mb-50">
                                         <div class="product-thumb">
                                             <a href="product-details.html">
-                                                <img src="assets/img/product/product-1.jpg" alt="">
+                                                <img src="~/assets/img/product/product-1.jpg" alt="">
                                             </a>
                                         </div>
                                         <div class="product-content">
@@ -234,7 +221,7 @@
                                     <div class="product-item mb-50">
                                         <div class="product-thumb">
                                             <a href="product-details.html">
-                                                <img src="assets/img/product/product-2.jpg" alt="">
+                                                <img src="~/assets/img/product/product-2.jpg" alt="">
                                             </a>
                                         </div>
                                         <div class="product-content">
@@ -260,7 +247,7 @@
                                     <div class="product-item mb-50">
                                         <div class="product-thumb">
                                             <a href="product-details.html">
-                                                <img src="assets/img/product/product-3.jpg" alt="">
+                                                <img src="~/assets/img/product/product-3.jpg" alt="">
                                             </a>
                                         </div>
                                         <div class="product-content">
@@ -286,7 +273,7 @@
                                     <div class="product-item mb-50">
                                         <div class="product-thumb">
                                             <a href="product-details.html">
-                                                <img src="assets/img/product/product-4.jpg" alt="">
+                                                <img src="~/assets/img/product/product-4.jpg" alt="">
                                             </a>
                                         </div>
                                         <div class="product-content">
@@ -312,7 +299,7 @@
                                     <div class="product-item mb-50">
                                         <div class="product-thumb">
                                             <a href="product-details.html">
-                                                <img src="assets/img/product/product-5.jpg" alt="">
+                                                <img src="~/assets/img/product/product-5.jpg" alt="">
                                             </a>
                                         </div>
                                         <div class="product-content">
@@ -347,4 +334,24 @@
 <!-- product details wrapper end -->
 @section Scripts {
     @await Html.PartialAsync("_AddToCartScript");
+    <script>
+        const reviewForm = document.getElementById("reviewForm");
+        reviewForm.addEventListener("submit", e => {
+            e.preventDefault();
+            console.log(Number(document.querySelector("input[name='rating']:checked").value));
+            axios.post("/review/new/" + location.href.split("/")[location.href.split("/").length - 1], {
+                rating: Number(document.querySelector("input[name='rating']:checked").value),
+                content: document.getElementById("content").value,
+            }).then(res => {
+                toastr.success("Your review has successfully been submitted");
+                document.getElementById("content").value = "";
+                document.getElementById("reviews").innerHTML = res.data;
+                document.getElementById("reviewCount").innerHTML = document.querySelectorAll(".review-box").length
+            }).catch(err => {
+                for (const [key, value] of Object.entries(err.response.data)) {
+                    toastr.error(value);
+                }
+            });
+        })
+    </script>
 }
