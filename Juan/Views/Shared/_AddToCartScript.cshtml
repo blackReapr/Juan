@@ -1,0 +1,30 @@
+﻿<script>
+    const btns = document.querySelectorAll(".addToCart");
+    const notification = document.querySelector(".notification");
+    btns.forEach(btn => {
+        btn.addEventListener("click", e => {
+            e.preventDefault();
+            axios.get(btn.getAttribute("href")).then(res => {
+                document.querySelector("#cart").innerHTML = res.data;
+                notification.innerHTML = document.querySelectorAll(".minicart-item").length;
+                toastr.options = {
+                    'closeButton': true,
+                    'debug': false,
+                    'newestOnTop': false,
+                    'progressBar': false,
+                    'positionClass': 'toast-top-right',
+                    'preventDuplicates': false,
+                    'showDuration': '1000',
+                    'hideDuration': '1000',
+                    'timeOut': '5000',
+                    'extendedTimeOut': '1000',
+                    'showEasing': 'swing',
+                    'hideEasing': 'linear',
+                    'showMethod': 'fadeIn',
+                    'hideMethod': 'fadeOut',
+                }
+                toastr.success("Product added to your cart!");
+            });
+        });
+    });
+</script>

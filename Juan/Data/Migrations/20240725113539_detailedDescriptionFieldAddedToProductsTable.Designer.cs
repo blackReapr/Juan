@@ -4,6 +4,7 @@ using Juan.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Juan.Data.Migrations
 {
     [DbContext(typeof(JuanDbContext))]
-    partial class JuanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240725113539_detailedDescriptionFieldAddedToProductsTable")]
+    partial class detailedDescriptionFieldAddedToProductsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -324,44 +327,6 @@ namespace Juan.Data.Migrations
                     b.ToTable("ProductSize");
                 });
 
-            modelBuilder.Entity("Juan.Models.Review", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Raiting")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Review");
-                });
-
             modelBuilder.Entity("Juan.Models.Size", b =>
                 {
                     b.Property<int>("Id")
@@ -632,25 +597,6 @@ namespace Juan.Data.Migrations
                     b.Navigation("Size");
                 });
 
-            modelBuilder.Entity("Juan.Models.Review", b =>
-                {
-                    b.HasOne("Juan.Models.Product", "Product")
-                        .WithMany("Reviews")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Juan.Models.AppUser", "User")
-                        .WithMany("Reviews")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -705,8 +651,6 @@ namespace Juan.Data.Migrations
             modelBuilder.Entity("Juan.Models.AppUser", b =>
                 {
                     b.Navigation("CartProducts");
-
-                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("Juan.Models.Color", b =>
@@ -721,8 +665,6 @@ namespace Juan.Data.Migrations
                     b.Navigation("ProductImages");
 
                     b.Navigation("ProductSizes");
-
-                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }

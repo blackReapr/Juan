@@ -97,7 +97,7 @@
                         <!-- product single item start -->
                         <div class="product-item mb-50">
                             <div class="product-thumb">
-                                <a href="product-details.html">
+                                <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
                                     <img src="~/assets/img/product/@product.MainImage" alt="@product.Name" />
                                 </a>
                             </div>
@@ -339,7 +339,6 @@
 </div>
 <!-- brand area end -->
 @section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js" integrity="sha512-JSCFHhKDilTRRXe9ak/FJ28dcpOJxzQaCd3Xg8MyF6XFjODhy/YMCM8HW0TFDckNHWUewW+kfvhin43hKtJxAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
         $(document).ready(function () {
             const modalBtns = document.querySelectorAll(".modalBtn");
@@ -417,7 +416,7 @@
                             if ($button.hasClass('inc')) {
                                 var newVal = parseFloat(oldValue) + 1;
                             } else {
-                                // Don't allow decrementing below zero
+                                // Don't allow decrementing below one
                                 if (oldValue > 1) {
                                     var newVal = parseFloat(oldValue) - 1;
                                 } else {
@@ -431,17 +430,5 @@
             })
         })
     </script>
-    <script>
-        const btns = document.querySelectorAll(".addToCart");
-        const notification = document.querySelector(".notification");
-        btns.forEach(btn => {
-            btn.addEventListener("click", e => {
-                e.preventDefault();
-                axios.get(btn.getAttribute("href")).then(res => {
-                    document.querySelector("#cart").innerHTML = res.data;
-                    notification.innerHTML = document.querySelectorAll(".minicart-item").length;
-                });
-            });
-        });
-    </script>
+    @await Html.PartialAsync("_AddToCartScript");
 }

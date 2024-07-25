@@ -21,4 +21,19 @@ public class ProductController : Controller
         if (product == null) return NotFound();
         return PartialView("_ProductModalPartial", product);
     }
+
+    public async Task<IActionResult> Detail(int? id)
+    {
+        if (id == null) return BadRequest();
+        Product? product = await _context.Products
+            .Include(p => p.ProductColors)
+            .ThenInclude(c => c.Color)
+            .Include(p => p.ProductSizes)
+            .ThenInclude(s => s.Size)
+            .Include(p => p.ProductImages)
+            .FirstOrDefaultAsync(x => x.Id == id);
+        if (product == null) return NotFound();
+        return View(product);
+    }
+
 }

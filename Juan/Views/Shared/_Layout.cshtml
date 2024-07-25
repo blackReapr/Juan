@@ -13,6 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="meta description" />
     <title>Juan - Shoes Store HTML Template</title>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <!--=== Favicon ===-->
     <link rel="shortcut icon"
           href="~/assets/img/favicon.ico"
@@ -740,6 +741,8 @@
     <div class="scroll-top not-visible">
         <i class="fa fa-angle-up"></i>
     </div>
+    <!-- Axios -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js" integrity="sha512-JSCFHhKDilTRRXe9ak/FJ28dcpOJxzQaCd3Xg8MyF6XFjODhy/YMCM8HW0TFDckNHWUewW+kfvhin43hKtJxAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Scroll to Top End -->
     <!--=======================Javascript============================-->
     <!--=== All Vendor Js ===-->
@@ -752,12 +755,14 @@
     <!--=== Jquery validation ===-->
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.3/jquery.validate.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js" integrity="sha512-xq+Vm8jC94ynOikewaQXMEkJIOBp7iArs3IhFWSWdRT3Pq8wFz46p+ZDFAR7kHnSFf+zUv52B3prRYnbDRdgog==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         const removeProduct = id => {
             axios.delete("/cart/removeproduct/" + id).then(res => {
                 document.querySelector("#cart").innerHTML = res.data;
                 notification.innerHTML = document.querySelectorAll(".minicart-item").length;
-
+                toastr.success("Product removed from your cart!");
             })
         };
     </script>

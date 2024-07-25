@@ -16,6 +16,8 @@ public class Product : BaseEntity
     public int Count { get; set; }
     public string? MainImage { get; set; }
     public bool IsNew { get; set; }
+    [MaxLength(5000)]
+    public string DetailedDescription { get; set; }
     public List<ProductImage>? ProductImages { get; set; }
     [NotMapped]
     public IFormFile? MainPhoto { get; set; }
@@ -23,4 +25,5 @@ public class Product : BaseEntity
     public IFormFile[]? Photos { get; set; }
     public List<ProductSize> ProductSizes { get; set; }
     public List<ProductColor> ProductColors { get; set; }
+    public List<Review> Reviews { get; set; }
 }
