@@ -1,0 +1,19 @@
+﻿@model IEnumerable<WishlistVM>
+
+
+@foreach (WishlistVM wishlistVM in Model)
+{
+    <tr>
+        <td class="pro-thumbnail">
+            <a asp-controller="product" asp-action="detail" asp-route-id="@wishlistVM.Id">
+                <img class="img-fluid" src="~/assets/img/product/@wishlistVM.Image"
+                     alt="@wishlistVM.Name" />
+            </a>
+        </td>
+        <td class="pro-title"><a asp-controller="product" asp-action="detail" asp-route-id="@wishlistVM.Id">@wishlistVM.Name</a></td>
+        <td class="pro-price"><span>$@wishlistVM.Price.ToString("0.00")</span></td>
+        <td class="pro-quantity"><span class="@(wishlistVM.IsInStock ? "text-success" : "text-danger")">@(wishlistVM.IsInStock ? "In Stock" : "Out of Stock")</span></td>
+        <td class="pro-subtotal"><a asp-controller="cart" asp-action="addtocart" asp-route-id="@wishlistVM.Id" class="sqr-btn addToCart">Add to Cart</a></td>
+        <td class="pro-remove"><a asp-controller="wishlist" asp-action="removeproduct" asp-route-id="@wishlistVM.Id" class="removeBtn"><i class="fa fa-trash-o"></i></a></td>
+    </tr>
+}

@@ -56,4 +56,44 @@ public class LayoutService : ILayoutService
         }
 
     }
+
+
+    public async Task UpdateWishlistAsync()
+    {
+        if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+        {
+            var wishlistCookie = _httpContextAccessor.HttpContext.Request.Cookies["wishlist"];
+            if (string.IsNullOrEmpty(wishlistCookie)) return;
+            IEnumerable<WishlistVM> wishlist = JsonSerializer.Deserialize<IEnumerable<WishlistVM>>(wishlistCookie);
+            foreach (WishlistVM wishlistVM in wishlist)
+            {
+                Product product = await _context.Products.FirstOrDefaultAsync(p => p.Id == wishlistVM.Id);
+                wishlistVM.Name = product.Name;
+                wishlistVM.Image = product.MainImage;
+                wishlistVM.IsInStock = product.Count > 0;
+                wishlistVM.Price = product.DiscountPrice > 0 ? product.DiscountPrice : product.Price;
+            }
+            return;
+        }
+        else
+        {
+            var wishlistProducts = _context.Wishlists.Include(c => c.Product).Where(c => c.User.NormalizedUserName == _httpContextAccessor.HttpContext.User.Identity.Name.ToUpperInvariant());
+            List<WishlistVM> wishlist = new List<WishlistVM>();
+            foreach (var wishlistProduct in wishlistProducts)
+            {
+                var wishlistVM = new WishlistVM()
+                {
+                    Id = wishlistProduct.ProductId,
+                    Name = wishlistProduct.Product.Name,
+                    IsInStock = wishlistProduct.Product.Count > 0,
+                    Image = wishlistProduct.Product.MainImage,
+                    Price = wishlistProduct.Product.DiscountPrice > 0 ? wishlistProduct.Product.DiscountPrice : wishlistProduct.Product.Price
+                };
+                wishlist.Add(wishlistVM);
+            }
+            _httpContextAccessor.HttpContext.Response.Cookies.Append("wishlist", JsonSerializer.Serialize(wishlist));
+            return;
+        }
+    }
+
 }

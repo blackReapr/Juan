@@ -13,4 +13,5 @@ public class AppUser : IdentityUser
     public IFormFile Image { get; set; }
     public List<CartProduct> CartProducts { get; set; }
     public List<Review> Reviews { get; set; }
+    public List<Wishlist> Wishlists { get; set; }
 }

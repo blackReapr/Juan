@@ -27,4 +27,5 @@ public class Product : BaseEntity
     public List<ProductColor> ProductColors { get; set; }
     public List<Review> Reviews { get; set; }
     public List<ProductCategory> ProductCategories { get; set; }
+    public List<Wishlist> Wishlists { get; set; }
 }

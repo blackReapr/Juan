@@ -18,6 +18,7 @@ public class JuanDbContext : IdentityDbContext<AppUser>
     public DbSet<ProductCategory> ProductCategories { get; set; }
     public DbSet<ProductSize> ProductSizes { get; set; }
     public DbSet<ProductColor> ProductColors { get; set; }
+    public DbSet<Wishlist> Wishlists { get; set; }
     public JuanDbContext(DbContextOptions options) : base(options) { }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

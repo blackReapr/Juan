@@ -1,4 +1,5 @@
-﻿<!-- breadcrumb area start -->
+﻿@model IEnumerable<WishlistVM>
+<!-- breadcrumb area start -->
 <div class="breadcrumb-area bg-img">
     <div class="container">
         <div class="row">
@@ -24,38 +25,97 @@
         <div class="row">
             <div class="col-lg-12">
                 <!-- Wishlist Table Area -->
-                <div class="cart-table table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th class="pro-thumbnail">Thumbnail</th>
-                                <th class="pro-title">Product</th>
-                                <th class="pro-price">Price</th>
-                                <th class="pro-quantity">Stock Status</th>
-                                <th class="pro-subtotal">Add to Cart</th>
-                                <th class="pro-remove">Remove</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td class="pro-thumbnail">
-                                    <a asp-controller="product" asp-action="detail">
-                                        <img class="img-fluid" src="~/assets/img/product/product-5.jpg"
-                                             alt="Product" />
-                                    </a>
-                                </td>
-                                <td class="pro-title"><a href="#">element snowboard</a></td>
-                                <td class="pro-price"><span>$295.00</span></td>
-                                <td class="pro-quantity"><span class="text-success">In Stock</span></td>
-                                <td class="pro-subtotal"><a href="cart.html" class="sqr-btn addToCart">Add to Cart</a></td>
-                                <td class="pro-remove"><a href="#"><i class="fa fa-trash-o"></i></a></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                @if (Model.Count() > 0)
+                {
+                    <div class="cart-table table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th class="pro-thumbnail">Thumbnail</th>
+                                    <th class="pro-title">Product</th>
+                                    <th class="pro-price">Price</th>
+                                    <th class="pro-quantity">Stock Status</th>
+                                    <th class="pro-subtotal">Add to Cart</th>
+                                    <th class="pro-remove">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody id="wishlistContainer">
+                                @await Html.PartialAsync("_WishlistPartial", Model)
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <h3 class="text-center">No products in your wishlist.</h3>
+                }
             </div>
         </div>
         <!-- Wishlist Page Content End -->
     </div>
 </div>
 <!-- wishlist main wrapper end -->
+
+
+<script>
+    const removeBtns = document.querySelectorAll(".removeBtn");
+    removeBtns.forEach(btn => {
+        btn.addEventListener("click", e => {
+            e.preventDefault();
+            axios.delete(btn.getAttribute("href")).then(res => {
+                document.querySelector("#wishlistContainer").innerHTML = res.data;
+                toastr.options = {
+                    'closeButton': true,
+                    'debug': false,
+                    'newestOnTop': false,
+                    'progressBar': false,
+                    'positionClass': 'toast-top-right',
+                    'preventDuplicates': false,
+                    'showDuration': '1000',
+                    'hideDuration': '1000',
+                    'timeOut': '5000',
+                    'extendedTimeOut': '1000',
+                    'showEasing': 'swing',
+                    'hideEasing': 'linear',
+                    'showMethod': 'fadeIn',
+                    'hideMethod': 'fadeOut',
+                }
+                toastr.success("Product removed from your wishlist!");
+            });
+        });
+    });
+</script>
+
+<script>
+    const btns = document.querySelectorAll(".addToCart");
+    const notification = document.querySelector(".notification");
+    btns.forEach(btn => {
+        btn.addEventListener("click", e => {
+            e.preventDefault();
+            axios.get(btn.getAttribute("href")).then(res => {
+                document.querySelector("#cart").innerHTML = res.data;
+                notification.innerHTML = document.querySelectorAll(".minicart-item").length;
+                toastr.options = {
+                    'closeButton': true,
+                    'debug': false,
+                    'newestOnTop': false,
+                    'progressBar': false,
+                    'positionClass': 'toast-top-right',
+                    'preventDuplicates': false,
+                    'showDuration': '1000',
+                    'hideDuration': '1000',
+                    'timeOut': '5000',
+                    'extendedTimeOut': '1000',
+                    'showEasing': 'swing',
+                    'hideEasing': 'linear',
+                    'showMethod': 'fadeIn',
+                    'hideMethod': 'fadeOut',
+                }
+                toastr.success("Product added to your cart!");
+                axios.delete("/wishlist/removeproduct/" + btn.getAttribute("href").split("/")[btn.getAttribute("href").split("/").length - 1]).then(deleteRes => {
+                    document.querySelector("#wishlistContainer").innerHTML = deleteRes.data;
+                });
+            });
+        });
+    });
+</script>
