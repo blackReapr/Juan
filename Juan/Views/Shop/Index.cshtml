@@ -32,9 +32,9 @@
                         </div>
                         <div class="sidebar-body">
                             <ul class="color-list">
-                                @foreach (Category category in Model.Categories)
+                                @foreach (IDictionary<string, string> category in Model.ProductCategories)
                                 {
-                                    <li><a href="#">@category.Name <span>(@Model.ProductCategories.Count(pc => pc.CategoryId == category.Id))</span></a></li>
+                                    <li><a asp-route-color="@category["name"]">@category["name"] <span>(@category["count"])</span></a></li>
                                 }
                             </ul>
                         </div>
@@ -68,9 +68,9 @@
                         </div>
                         <div class="sidebar-body">
                             <ul class="color-list">
-                                @foreach (Color color in Model.Colors)
+                                @foreach (IDictionary<string, string> color in Model.ProductColors)
                                 {
-                                    <li><a href="#">@color.Name <span>(@Model.ProductColors.Count(pc => pc.ColorId == color.Id))</span></a></li>
+                                    <li><a asp-route-color="@color["name"]">@color["name"] <span>(@color["count"])</span></a></li>
                                 }
                             </ul>
                         </div>
@@ -83,9 +83,9 @@
                         </div>
                         <div class="sidebar-body">
                             <ul class="size-list">
-                                @foreach (Size size in Model.Sizes)
+                                @foreach (IDictionary<string, string> size in Model.ProductSizes)
                                 {
-                                    <li><a href="#">@size.Name <span>(@Model.ProductSizes.Count(ps => ps.SizeId == size.Id))</span></a></li>
+                                    <li><a asp-route-size="@size["name"]">@size["name"] <span>(@size["count"])</span></a></li>
                                 }
                             </ul>
                         </div>
@@ -140,95 +140,95 @@
                     </div>
                     <!-- shop product top wrap start -->
                     <!-- product item list start -->
-                    <div class="shop-product-wrap grid-view row mbn-50">
-                        @foreach (Product product in Model.Products)
-                        {
-                            <div class="col-lg-4 col-sm-6">
-                                <!-- product grid item start -->
-                                <div class="product-item mb-53">
-                                    <div class="product-thumb">
-                                        <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
-                                            <img src="~/assets/img/product/@product.MainImage" alt="@product.Name">
-                                        </a>
-                                    </div>
-                                    <div class="product-content">
-                                        <h5 class="product-name">
-                                            <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">@product.Name</a>
-                                        </h5>
-                                        <div class="price-box">
-                                            @if (product.DiscountPrice > 0)
-                                            {
-                                                <span class="price-regular">$@product.DiscountPrice.ToString("0.00")</span>
-                                                <span class="price-old"><del>$@product.Price.ToString("0.00")</del></span>
-                                            }
-                                            else
-                                            {
-                                                <span class="price-regular">$@product.Price.ToString("0.00")</span>
-                                            }
-                                        </div>
-                                        <div class="product-action-link">
-                                            <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
-                                            <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" data-toggle="tooltip" title="Add To Cart" class="addToCart"><i class="ion-bag"></i></a>
-                                            <a href="#" data-toggle="modal" data-target="#quick_view">
-                                                <span data-toggle="tooltip"
-                                                      title="Quick View"><i class="ion-ios-eye-outline"></i></span>
+                    @if (Model.Products.Count() > 0)
+                    {
+                        <div class="shop-product-wrap grid-view row mbn-50">
+                            @foreach (Product product in Model.Products)
+                            {
+                                <div class="col-lg-4 col-sm-6">
+                                    <!-- product grid item start -->
+                                    <div class="product-item mb-53">
+                                        <div class="product-thumb">
+                                            <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
+                                                <img src="~/assets/img/product/@product.MainImage" alt="@product.Name">
                                             </a>
                                         </div>
-                                    </div>
-                                </div>
-                                <!-- product grid item end -->
-                                <!-- product list item start -->
-                                <div class="product-list-item mb-30">
-                                    <div class="product-thumb">
-                                        <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
-                                            <img src="~/assets/img/product/@product.MainImage" alt="@product.Name">
-                                        </a>
-                                    </div>
-                                    <div class="product-content-list">
-                                        <h5 class="product-name">
-                                            <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">@product.Name</a>
-                                        </h5>
-                                        <div class="price-box">
-                                            @if (product.DiscountPrice > 0)
-                                            {
-                                                <span class="price-regular">$@product.DiscountPrice.ToString("0.00")</span>
-                                                <span class="price-old"><del>$@product.Price.ToString("0.00")</del></span>
-                                            }
-                                            else
-                                            {
-                                                <span class="price-regular">$@product.DiscountPrice.ToString("0.00")</span>
-                                            }
+                                        <div class="product-content">
+                                            <h5 class="product-name">
+                                                <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">@product.Name</a>
+                                            </h5>
+                                            <div class="price-box">
+                                                @if (product.DiscountPrice > 0)
+                                                {
+                                                    <span class="price-regular">$@product.DiscountPrice.ToString("0.00")</span>
+                                                    <span class="price-old"><del>$@product.Price.ToString("0.00")</del></span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="price-regular">$@product.Price.ToString("0.00")</span>
+                                                }
+                                            </div>
+                                            <div class="product-action-link">
+                                                <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
+                                                <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" data-toggle="tooltip" title="Add To Cart" class="addToCart"><i class="ion-bag"></i></a>
+                                                <a href="#" data-toggle="modal" data-target="#quick_view">
+                                                    <span data-toggle="tooltip"
+                                                          title="Quick View"><i class="ion-ios-eye-outline"></i></span>
+                                                </a>
+                                            </div>
                                         </div>
-                                        <p>
-                                            @product.Description
-                                        </p>
-                                        <div class="product-link-2 position-static">
-                                            <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
-                                            <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" data-toggle="tooltip" class="addToCart" title="Add To Cart"><i class="ion-bag"></i></a>
-                                            <a href="#" data-toggle="modal" data-target="#quick_view">
-                                                <span data-toggle="tooltip"
-                                                      title="Quick View"><i class="ion-ios-eye-outline"></i></span>
+                                    </div>
+                                    <!-- product grid item end -->
+                                    <!-- product list item start -->
+                                    <div class="product-list-item mb-30">
+                                        <div class="product-thumb">
+                                            <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
+                                                <img src="~/assets/img/product/@product.MainImage" alt="@product.Name">
                                             </a>
                                         </div>
+                                        <div class="product-content-list">
+                                            <h5 class="product-name">
+                                                <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">@product.Name</a>
+                                            </h5>
+                                            <div class="price-box">
+                                                @if (product.DiscountPrice > 0)
+                                                {
+                                                    <span class="price-regular">$@product.DiscountPrice.ToString("0.00")</span>
+                                                    <span class="price-old"><del>$@product.Price.ToString("0.00")</del></span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="price-regular">$@product.DiscountPrice.ToString("0.00")</span>
+                                                }
+                                            </div>
+                                            <p>
+                                                @product.Description
+                                            </p>
+                                            <div class="product-link-2 position-static">
+                                                <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
+                                                <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" data-toggle="tooltip" class="addToCart" title="Add To Cart"><i class="ion-bag"></i></a>
+                                                <a href="#" data-toggle="modal" data-target="#quick_view">
+                                                    <span data-toggle="tooltip"
+                                                          title="Quick View"><i class="ion-ios-eye-outline"></i></span>
+                                                </a>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <!-- product list item start -->
                                 </div>
-                                <!-- product list item start -->
-                            </div>
-                        }
+                            }
+                        </div>
+                        <!-- start pagination area -->
+                        @await Html.PartialAsync("_PaginationPartial", Model.Products)
+                        <!-- end pagination area -->
+                    }
+                    else
+                    {
+                        <h3 class="text-center">No product found.</h3>
+                    }
 
 
-                    </div>
-                    <!-- start pagination area -->
-                    <div class="paginatoin-area text-center mt-45">
-                        <ul class="pagination-box">
-                            <li><a class="Previous" href="#"><i class="ion-ios-arrow-left"></i></a></li>
-                            <li class="active"><a href="#">1</a></li>
-                            <li><a href="#">2</a></li>
-                            <li><a href="#">3</a></li>
-                            <li><a class="Next" href="#"><i class="ion-ios-arrow-right"></i></a></li>
-                        </ul>
-                    </div>
-                    <!-- end pagination area -->
+
                 </div>
             </div>
         </div>

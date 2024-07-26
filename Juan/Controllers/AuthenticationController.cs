@@ -48,7 +48,7 @@ public class AuthenticationController : Controller
     public async Task<IActionResult> Login(LoginVM loginVM, string? returnUrl)
     {
         if (!ModelState.IsValid) return View(loginVM);
-        AppUser? user = await _userManager.Users.Include(u => u.CartProducts).FirstOrDefaultAsync(u => u.NormalizedUserName == loginVM.UsernameOrEmail.ToUpperInvariant() || u.NormalizedEmail == loginVM.UsernameOrEmail.ToUpperInvariant());
+        AppUser? user = await _userManager.Users.Include(u => u.CartProducts).ThenInclude(cp => cp.Product).FirstOrDefaultAsync(u => u.NormalizedUserName == loginVM.UsernameOrEmail.ToUpperInvariant() || u.NormalizedEmail == loginVM.UsernameOrEmail.ToUpperInvariant());
         if (user == null)
         {
             ModelState.AddModelError("Error", "Invalid username/email or password");
@@ -102,6 +102,7 @@ public class AuthenticationController : Controller
     public async Task<IActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
+        Response.Cookies.Append("cart", "");
         return RedirectToAction("Index", "Home");
     }
 }

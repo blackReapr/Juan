@@ -133,7 +133,51 @@
                                         </table>
                                     </div>
                                     <div class="tab-pane fade" id="tab_three">
-                                        <form id="reviewForm" class="review-form">
+                                        @if (User.Identity.IsAuthenticated)
+                                        {
+                                            <form id="reviewForm" class="review-form">
+
+                                                <h5>
+                                                    <span id="reviewCount" style="color:#333333;">
+                                                        @(Model.Reviews.Count() == 0 ? "No" : Model.Reviews.Count())
+                                                    </span>
+                                                    review(s) for <span>@Model.Name</span>
+                                                </h5>
+                                                <div id="reviews" class="total-reviews flex-column">
+                                                    @await Html.PartialAsync("_ReviewPartial", Model.Reviews)
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <div class="col">
+                                                        <label class="col-form-label" for="content"><span class="text-danger">*</span> Your Review</label>
+                                                        <textarea id="content" class="form-control"></textarea>
+                                                        <div class="help-block pt-10"><span class="text-danger">Note:</span> HTML is not translated!</div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col">
+                                                        <label class="col-form-label"><span class="text-danger">*</span> Rating</label>
+                                                        &nbsp;&nbsp;&nbsp; Bad&nbsp;
+                                                        <input type="radio" value="1" name="rating">
+                                                        &nbsp;
+                                                        <input type="radio" value="2" name="rating">
+                                                        &nbsp;
+                                                        <input type="radio" value="3" name="rating">
+                                                        &nbsp;
+                                                        <input type="radio" value="4" name="rating">
+                                                        &nbsp;
+                                                        <input type="radio" value="5" name="rating" checked>
+                                                        &nbsp;Good
+                                                    </div>
+                                                </div>
+                                                <div class="buttons">
+                                                    <button class="sqr-btn" type="submit">Continue</button>
+                                                </div>
+                                            </form> <!-- end of review-form -->
+                                        }
+                                        else
+                                        {
+
                                             <h5>
                                                 <span id="reviewCount" style="color:#333333;">
                                                     @(Model.Reviews.Count() == 0 ? "No" : Model.Reviews.Count())
@@ -143,33 +187,9 @@
                                             <div id="reviews" class="total-reviews flex-column">
                                                 @await Html.PartialAsync("_ReviewPartial", Model.Reviews)
                                             </div>
-                                            <div class="form-group row">
-                                                <div class="col">
-                                                    <label class="col-form-label" for="content"><span class="text-danger">*</span> Your Review</label>
-                                                    <textarea id="content" class="form-control"></textarea>
-                                                    <div class="help-block pt-10"><span class="text-danger">Note:</span> HTML is not translated!</div>
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <div class="col">
-                                                    <label class="col-form-label"><span class="text-danger">*</span> Rating</label>
-                                                    &nbsp;&nbsp;&nbsp; Bad&nbsp;
-                                                    <input type="radio" value="1" name="rating">
-                                                    &nbsp;
-                                                    <input type="radio" value="2" name="rating">
-                                                    &nbsp;
-                                                    <input type="radio" value="3" name="rating">
-                                                    &nbsp;
-                                                    <input type="radio" value="4" name="rating">
-                                                    &nbsp;
-                                                    <input type="radio" value="5" name="rating" checked>
-                                                    &nbsp;Good
-                                                </div>
-                                            </div>
-                                            <div class="buttons">
-                                                <button class="sqr-btn" type="submit">Continue</button>
-                                            </div>
-                                        </form> <!-- end of review-form -->
+                                            <h3 class="text-center">Sign in to post a review</h3>
+                                        }
+
                                     </div>
                                 </div>
                             </div>
