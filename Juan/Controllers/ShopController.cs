@@ -15,7 +15,7 @@ public class ShopController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string? category, string? color, string? size, int page = 1)
+    public async Task<IActionResult> Index(string? category, string? color, string? size, string? amount, int page = 1)
     {
         IEnumerable<Size> sizes = await _context.Sizes.AsNoTracking().ToListAsync();
         IEnumerable<Color> colors = await _context.Colors.AsNoTracking().ToListAsync();
@@ -24,6 +24,16 @@ public class ShopController : Controller
         if (color != null) query = query.Where(p => p.ProductColors.Any(pc => pc.Color.Name == color));
         if (size != null) query = query.Where(p => p.ProductSizes.Any(ps => ps.Size.Name == color));
         if (category != null) query = query.Where(p => p.ProductCategories.Any(pc => pc.Category.Name == color));
+        if (amount != null)
+        {
+            string v = amount.Split("-")[0].Trim();
+            v = v.Remove(0, 1);
+            int min = Convert.ToInt32(v);
+            string x = amount.Split("-")[1].Trim();
+            x = x.Remove(0, 1);
+            int max = Convert.ToInt32(x);
+            query = query.Where(p => (p.DiscountPrice > 0 ? (p.DiscountPrice >= min && p.DiscountPrice <= max) : (p.Price >= min && p.Price <= max)));
+        }
 
         IEnumerable<Product> products = await query.ToListAsync();
         IEnumerable<Category> categories = await _context.Categories.AsNoTracking().ToListAsync();
@@ -58,7 +68,7 @@ public class ShopController : Controller
         ShopVM shopVM = new()
         {
             Categories = categories,
-            Products = await PaginationVM<Product>.CreateAsync(query, page, 9),
+            Products = await PaginationVM<Product>.CreateAsync(query, page, 9, category, color, size, amount),
             Colors = colors,
             Sizes = sizes,
             ProductColors = productColors,

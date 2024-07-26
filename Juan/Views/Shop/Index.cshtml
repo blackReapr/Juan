@@ -34,7 +34,7 @@
                             <ul class="color-list">
                                 @foreach (IDictionary<string, string> category in Model.ProductCategories)
                                 {
-                                    <li><a asp-route-color="@category["name"]">@category["name"] <span>(@category["count"])</span></a></li>
+                                    <li><a asp-route-amount="@Model.Products.PriceRange" asp-route-size="@Model.Products.SizeName" asp-route-color="@category["name"]">@category["name"] <span>(@category["count"])</span></a></li>
                                 }
                             </ul>
                         </div>
@@ -49,12 +49,12 @@
                             <div class="price-range-wrap">
                                 <div class="price-range" data-min="20" data-max="400"></div>
                                 <div class="range-slider">
-                                    <form action="#">
+                                    <form method="get" asp-route-color="@Model.Products.ColorName" asp-route-size="@Model.Products.SizeName" asp-route-category="@Model.Products.CategoryName">
                                         <div class="price-input">
                                             <label for="amount">Price: </label>
-                                            <input type="text" id="amount">
+                                            <input type="text" id="amount" name="amount">
                                         </div>
-                                        <button class="filter-btn">filter</button>
+                                        <button class="filter-btn" type="submit">filter</button>
                                     </form>
                                 </div>
                             </div>
@@ -70,7 +70,7 @@
                             <ul class="color-list">
                                 @foreach (IDictionary<string, string> color in Model.ProductColors)
                                 {
-                                    <li><a asp-route-color="@color["name"]">@color["name"] <span>(@color["count"])</span></a></li>
+                                    <li><a asp-route-category="@Model.Products.CategoryName" asp-route-amount="@Model.Products.PriceRange" asp-route-size="@Model.Products.SizeName" asp-route-color="@color["name"]">@color["name"] <span>(@color["count"])</span></a></li>
                                 }
                             </ul>
                         </div>
@@ -85,7 +85,7 @@
                             <ul class="size-list">
                                 @foreach (IDictionary<string, string> size in Model.ProductSizes)
                                 {
-                                    <li><a asp-route-size="@size["name"]">@size["name"] <span>(@size["count"])</span></a></li>
+                                    <li><a asp-route-category="@Model.Products.CategoryName" asp-route-amount="@Model.Products.PriceRange" asp-route-color="@Model.Products.ColorName" asp-route-size="@size["name"]">@size["name"] <span>(@size["count"])</span></a></li>
                                 }
                             </ul>
                         </div>
@@ -132,7 +132,7 @@
                                         </select>
                                     </div>
                                     <div class="product-amount">
-                                        <p>Showing 1–16 of 21 results</p>
+                                        <p>Showing @((Model.Products.CurrentPage - 1) * Model.Products.Take + 1)–@(Model.Products.CurrentPage * Model.Products.Take) of @Model.Products.ItemsCount results</p>
                                     </div>
                                 </div>
                             </div>
@@ -226,9 +226,6 @@
                     {
                         <h3 class="text-center">No product found.</h3>
                     }
-
-
-
                 </div>
             </div>
         </div>
