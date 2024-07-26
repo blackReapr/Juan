@@ -760,7 +760,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         let removeProduct;
-        if (location.href.split("/")[1] != "cart") {
+        if (location.href.split("/")[3] != "cart") {
             removeProduct = id => {
                 axios.delete("/cart/removeproduct/" + id).then(res => {
                     document.querySelector("#cart").innerHTML = res.data;
