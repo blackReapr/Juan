@@ -11,6 +11,7 @@
         int PageCount { get; }
         string PriceRange { get; }
         string SizeName { get; }
+        string SortBy { get; }
         int Start { get; }
         int ItemsCount { get; }
         int Take { get; }

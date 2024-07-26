@@ -32,10 +32,10 @@ namespace Juan.Controllers
             //    _context.Products.Add(product);
             //    await _context.SaveChangesAsync();
             //}
-            IEnumerable<Slider> sliders = await _context.Sliders.ToListAsync();
-            IEnumerable<Product> products = await _context.Products.ToListAsync();
-            IEnumerable<Product> newProducts = await _context.Products.Where(p => p.IsNew).ToListAsync();
-            IEnumerable<Blog> blogs = await _context.Blogs.Include(b => b.User).ToListAsync();
+            IEnumerable<Slider> sliders = await _context.Sliders.AsNoTracking().ToListAsync();
+            IEnumerable<Product> products = await _context.Products.AsNoTracking().ToListAsync();
+            IEnumerable<Product> newProducts = await _context.Products.AsNoTracking().Where(p => p.IsNew).ToListAsync();
+            IEnumerable<Blog> blogs = await _context.Blogs.AsNoTracking().Include(b => b.User).ToListAsync();
             HomeVM homeVM = new()
             {
                 Sliders = sliders,

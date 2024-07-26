@@ -121,15 +121,17 @@
                                 <div class="top-bar-right">
                                     <div class="product-short">
                                         <p>Sort By : </p>
-                                        <select class="nice-select" name="sortby">
-                                            <option value="trending">Relevance</option>
-                                            <option value="sales">Name (A - Z)</option>
-                                            <option value="sales">Name (Z - A)</option>
-                                            <option value="rating">Price (Low &gt; High)</option>
-                                            <option value="date">Rating (Lowest)</option>
-                                            <option value="price-asc">Model (A - Z)</option>
-                                            <option value="price-asc">Model (Z - A)</option>
-                                        </select>
+                                        <form method="get">
+                                            <select class="nice-select" name="sortby" onchange="this.form.submit()">
+                                                <option value="date">Neweset</option>
+                                                <option value="name-asc">Name (A - Z)</option>
+                                                <option value="name-desc">Name (Z - A)</option>
+                                                <option value="price-asc">Price (Low &gt; High)</option>
+                                                <option value="price-desc">Price (High &gt; Low)</option>
+                                                <option value="rating-asc">Rating (Lowest)</option>
+                                                <option value="rating-desc">Rating (Highest)</option>
+                                            </select>
+                                        </form>
                                     </div>
                                     <div class="product-amount">
                                         <p>Showing @((Model.Products.CurrentPage - 1) * Model.Products.Take + 1)–@(Model.Products.CurrentPage * Model.Products.Take) of @Model.Products.ItemsCount results</p>
@@ -171,7 +173,7 @@
                                             <div class="product-action-link">
                                                 <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
                                                 <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" data-toggle="tooltip" title="Add To Cart" class="addToCart"><i class="ion-bag"></i></a>
-                                                <a href="#" data-toggle="modal" data-target="#quick_view">
+                                                <a asp-controller="product" asp-action="modal" asp-route-id="@product.Id" class="modalBtn" data-toggle="modal" data-target="#quick_view">
                                                     <span data-toggle="tooltip"
                                                           title="Quick View"><i class="ion-ios-eye-outline"></i></span>
                                                 </a>
@@ -206,8 +208,8 @@
                                             </p>
                                             <div class="product-link-2 position-static">
                                                 <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
-                                                <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" data-toggle="tooltip" class="addToCart" title="Add To Cart"><i class="ion-bag"></i></a>
-                                                <a href="#" data-toggle="modal" data-target="#quick_view">
+                                                <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" data-toggle="tooltip" title="Add To Cart" class="addToCart"><i class="ion-bag"></i></a>
+                                                <a asp-controller="product" asp-action="modal" asp-route-id="@product.Id" class="modalBtn" data-toggle="modal" data-target="#quick_view">
                                                     <span data-toggle="tooltip"
                                                           title="Quick View"><i class="ion-ios-eye-outline"></i></span>
                                                 </a>
@@ -236,4 +238,5 @@
 <!-- page main wrapper end -->
 @section Scripts {
     @await Html.PartialAsync("_AddToCartScript")
+    @await Html.PartialAsync("_ProductModalScript")
 }

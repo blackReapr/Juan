@@ -15,7 +15,7 @@ public class ShopController : Controller
         _context = context;
     }
 
-    public async Task<IActionResult> Index(string? category, string? color, string? size, string? amount, int page = 1)
+    public async Task<IActionResult> Index(string? category, string? color, string? size, string? amount, string? sortBy, int page = 1)
     {
         IEnumerable<Size> sizes = await _context.Sizes.AsNoTracking().ToListAsync();
         IEnumerable<Color> colors = await _context.Colors.AsNoTracking().ToListAsync();
@@ -33,6 +33,16 @@ public class ShopController : Controller
             x = x.Remove(0, 1);
             int max = Convert.ToInt32(x);
             query = query.Where(p => (p.DiscountPrice > 0 ? (p.DiscountPrice >= min && p.DiscountPrice <= max) : (p.Price >= min && p.Price <= max)));
+        }
+        if (sortBy != null)
+        {
+            if (sortBy == "date") query = query.OrderByDescending(p => p.CreatedAt);
+            else if (sortBy == "name-asc") query = query.OrderBy(p => p.Name);
+            else if (sortBy == "name-desc") query = query.OrderByDescending(p => p.Name);
+            else if (sortBy == "price-asc") query = query.OrderBy(p => p.DiscountPrice > 0 ? p.DiscountPrice : p.Price);
+            else if (sortBy == "price-desc") query = query.OrderByDescending(p => p.DiscountPrice > 0 ? p.DiscountPrice : p.Price);
+            else if (sortBy == "rating-asc") query = query.OrderBy(p => p.Reviews.Average(r => r.Rating));
+            else if (sortBy == "rating-desc") query = query.OrderByDescending(p => p.Reviews.Average(r => r.Rating));
         }
 
         IEnumerable<Product> products = await query.ToListAsync();
@@ -68,7 +78,7 @@ public class ShopController : Controller
         ShopVM shopVM = new()
         {
             Categories = categories,
-            Products = await PaginationVM<Product>.CreateAsync(query, page, 9, category, color, size, amount),
+            Products = await PaginationVM<Product>.CreateAsync(query, page, 9, category, color, size, amount, sortBy),
             Colors = colors,
             Sizes = sizes,
             ProductColors = productColors,

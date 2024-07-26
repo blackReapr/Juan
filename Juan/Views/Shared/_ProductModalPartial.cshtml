@@ -57,7 +57,7 @@
                                         <input type="text" value="1" />
                                     </div>
                                 </div>
-                                <a href="cart.html" class="btn btn-default">Add To Cart</a>
+                                <a asp-controller="cart" asp-action="addtocart" asp-route-id="@Model.Id" class="btn btn-default addToCart">Add To Cart</a>
                             </div>
                             <div class="availability mb-20">
                                 <h5 class="cat-title">Availability:</h5>
@@ -86,16 +86,4 @@
     </div>
 </div>
 <!-- Quick view modal end -->
-@section Scripts {
-    <script>
-        (function ($) {
-            "use strict";
-            // prodct details slider active
-            $('.product-large-slider').slick({
-                fade: true,
-                arrows: false,
-                asNavFor: '.pro-nav'
-            });
-        })
-    </script>
-}
+<partial name="_AddToCartScript" />
