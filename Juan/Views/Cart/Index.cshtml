@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CartVM>
+﻿@model CartPartialVM
 <!-- breadcrumb area start -->
 <div class="breadcrumb-area bg-img">
     <div class="container">
@@ -21,9 +21,7 @@
 <!-- cart main wrapper start -->
 <div class="cart-main-wrapper section-padding">
     <div id="cartContainer" class="container">
-        @{
-            await Html.RenderPartialAsync("_CartIndexPartial");
-        }
+        @await Html.PartialAsync("_CartIndexPartial")
     </div>
 </div>
 <!-- cart main wrapper end -->

@@ -4,6 +4,7 @@ using Juan.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Juan.Data.Migrations
 {
     [DbContext(typeof(JuanDbContext))]
-    partial class JuanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240726164217_coouponsTableAdded")]
+    partial class coouponsTableAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,9 +36,6 @@ namespace Juan.Data.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CouponId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -93,8 +93,6 @@ namespace Juan.Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CouponId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -238,8 +236,8 @@ namespace Juan.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Sale")
-                        .HasColumnType("money");
+                    b.Property<int>("Sale")
+                        .HasColumnType("int");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -675,15 +673,6 @@ namespace Juan.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Juan.Models.AppUser", b =>
-                {
-                    b.HasOne("Juan.Models.Coupon", "Coupon")
-                        .WithMany("Users")
-                        .HasForeignKey("CouponId");
-
-                    b.Navigation("Coupon");
-                });
-
             modelBuilder.Entity("Juan.Models.Blog", b =>
                 {
                     b.HasOne("Juan.Models.AppUser", "User")
@@ -890,11 +879,6 @@ namespace Juan.Data.Migrations
             modelBuilder.Entity("Juan.Models.Color", b =>
                 {
                     b.Navigation("ProductColors");
-                });
-
-            modelBuilder.Entity("Juan.Models.Coupon", b =>
-                {
-                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("Juan.Models.Product", b =>

@@ -171,7 +171,7 @@
                                                 }
                                             </div>
                                             <div class="product-action-link">
-                                                <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
+                                                <a asp-controller="wishlist" asp-action="new" asp-route-id="@product.Id" data-toggle="tooltip" title="Wishlist" class="wishlistBtn"><i class="ion-android-favorite-outline"></i></a>
                                                 <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" data-toggle="tooltip" title="Add To Cart" class="addToCart"><i class="ion-bag"></i></a>
                                                 <a asp-controller="product" asp-action="modal" asp-route-id="@product.Id" class="modalBtn" data-toggle="modal" data-target="#quick_view">
                                                     <span data-toggle="tooltip"
@@ -207,7 +207,7 @@
                                                 @product.Description
                                             </p>
                                             <div class="product-link-2 position-static">
-                                                <a href="#" data-toggle="tooltip" title="Wishlist"><i class="ion-android-favorite-outline"></i></a>
+                                                <a asp-controller="wishlist" asp-action="new" asp-route-id="@product.Id" data-toggle="tooltip" title="Wishlist" class="wishlistBtn"><i class="ion-android-favorite-outline"></i></a>
                                                 <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" data-toggle="tooltip" title="Add To Cart" class="addToCart"><i class="ion-bag"></i></a>
                                                 <a asp-controller="product" asp-action="modal" asp-route-id="@product.Id" class="modalBtn" data-toggle="modal" data-target="#quick_view">
                                                     <span data-toggle="tooltip"
@@ -239,4 +239,5 @@
 @section Scripts {
     @await Html.PartialAsync("_AddToCartScript")
     @await Html.PartialAsync("_ProductModalScript")
+    @await Html.PartialAsync("_AddToWishlistScript")
 }

@@ -1,5 +1,5 @@
-﻿using System.Text.Json;
-using Juan.Data;
+﻿using Juan.Data;
+using Juan.Helpers;
 using Juan.Models;
 using Juan.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -21,15 +21,13 @@ public class CartController : Controller
 
     public async Task<IActionResult> Index()
     {
-        IEnumerable<CartVM>? cart = JsonSerializer.Deserialize<IEnumerable<CartVM>>(Request.Cookies["cart"]);
-        if (cart == null) cart = new List<CartVM>();
+        CartPartialVM? cart = CartPartialVMConverter.Deserialize(Request.Cookies["cart"]) ?? new();
         return View(cart);
     }
 
     public async Task<IActionResult> CartIndexPartial()
     {
-        IEnumerable<CartVM>? cart = JsonSerializer.Deserialize<IEnumerable<CartVM>>(Request.Cookies["cart"]);
-        if (cart == null) cart = new List<CartVM>();
+        CartPartialVM? cart = CartPartialVMConverter.Deserialize(Request.Cookies["cart"]) ?? new();
         return PartialView("_CartIndexPartial", cart);
     }
 
@@ -38,13 +36,13 @@ public class CartController : Controller
         if (id == null) return BadRequest();
         var product = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return BadRequest();
-        List<CartVM> cart;
+        CartPartialVM cart;
         string basket = HttpContext.Request.Cookies["cart"];
         if (string.IsNullOrEmpty(basket)) cart = new();
 
         else
         {
-            cart = JsonSerializer.Deserialize<List<CartVM>>(basket);
+            cart = CartPartialVMConverter.Deserialize(basket);
             if (cart.Exists(p => p.Id == id))
             {
                 cart.Find(p => p.Id == id).Count++;
@@ -79,7 +77,7 @@ public class CartController : Controller
             }
             await _context.SaveChangesAsync();
         }
-        HttpContext.Response.Cookies.Append("cart", JsonSerializer.Serialize(cart));
+        HttpContext.Response.Cookies.Append("cart", CartPartialVMConverter.Serialize(cart));
 
         return PartialView("_CartPartial", cart);
     }
@@ -90,12 +88,12 @@ public class CartController : Controller
         if (id == null) return BadRequest();
         Product? product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
-        List<CartVM>? cart = JsonSerializer.Deserialize<List<CartVM>>(Request.Cookies["cart"]);
+        CartPartialVM? cart = CartPartialVMConverter.Deserialize(Request.Cookies["cart"]);
         if (cart == null) return NotFound();
         CartVM? existProduct = cart.FirstOrDefault(p => p.Id == product.Id);
         if (existProduct == null) return NotFound();
         cart.Remove(existProduct);
-        HttpContext.Response.Cookies.Append("cart", JsonSerializer.Serialize(cart));
+        HttpContext.Response.Cookies.Append("cart", CartPartialVMConverter.Serialize(cart));
         if (User.Identity.IsAuthenticated)
         {
             var cartProduct = await _context.CartProducts.Include(p => p.User).FirstOrDefaultAsync(p => p.ProductId == id && p.User.NormalizedUserName == User.Identity.Name.ToUpperInvariant());
@@ -111,12 +109,12 @@ public class CartController : Controller
         if (id == null) return BadRequest();
         var product = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return BadRequest();
-        List<CartVM> cart;
+        CartPartialVM cart;
         string basket = HttpContext.Request.Cookies["cart"];
         if (string.IsNullOrEmpty(basket)) cart = new();
         else
         {
-            cart = JsonSerializer.Deserialize<List<CartVM>>(basket);
+            cart = CartPartialVMConverter.Deserialize(basket);
             if (cart.Exists(p => p.Id == id))
             {
                 var existCart = cart.Find(p => p.Id == id);
@@ -147,8 +145,46 @@ public class CartController : Controller
             }
             await _context.SaveChangesAsync();
         }
-        HttpContext.Response.Cookies.Append("cart", JsonSerializer.Serialize(cart));
+        HttpContext.Response.Cookies.Append("cart", CartPartialVMConverter.Serialize(cart));
 
         return PartialView("_CartPartial", cart);
+    }
+
+    public async Task<IActionResult> Coupon(string? coupon)
+    {
+        CartPartialVM? cart = CartPartialVMConverter.Deserialize(Request.Cookies["cart"]) ?? new();
+        IDictionary<string, string> data = new Dictionary<string, string>();
+        Coupon? existingCoupon = await _context.Coupons.FirstOrDefaultAsync(c => c.Name == coupon);
+
+        if (User.Identity.IsAuthenticated)
+        {
+            AppUser? appUser = await _userManager.FindByNameAsync(User.Identity.Name);
+            if (appUser == null) return BadRequest();
+            if (appUser.CouponId == null) appUser.CouponId = existingCoupon?.Id;
+            else
+            {
+                Response.StatusCode = 400;
+                data["error"] = "You already have an active coupon";
+                return Json(data);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        if (coupon == null || existingCoupon == null)
+        {
+            Response.StatusCode = 400;
+            data["error"] = "Invalid coupon code";
+            return Json(data);
+        }
+
+        cart.Coupon = existingCoupon.Name;
+        cart.DiscountRate = existingCoupon.Sale;
+
+
+
+        Response.Cookies.Append("cart", CartPartialVMConverter.Serialize(cart));
+
+        return PartialView("_CartIndexPartial", cart);
     }
 }

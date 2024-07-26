@@ -341,32 +341,5 @@
 @section Scripts {
     @await Html.PartialAsync("_ProductModalScript")
     @await Html.PartialAsync("_AddToCartScript")
-    <script>
-        const wishlistBtns = document.querySelectorAll(".wishlistBtn");
-        wishlistBtns.forEach(btn => {
-            btn.addEventListener("click", e => {
-                e.preventDefault();
-                axios.post(btn.getAttribute("href")).then(res => {
-                    toastr.options = {
-                        'closeButton': true,
-                        'debug': false,
-                        'newestOnTop': false,
-                        'progressBar': false,
-                        'positionClass': 'toast-top-right',
-                        'preventDuplicates': false,
-                        'showDuration': '1000',
-                        'hideDuration': '1000',
-                        'timeOut': '5000',
-                        'extendedTimeOut': '1000',
-                        'showEasing': 'swing',
-                        'hideEasing': 'linear',
-                        'showMethod': 'fadeIn',
-                        'hideMethod': 'fadeOut',
-                    }
-                    console.log(res.data);
-                    toastr.success(res.data.message);
-                });
-            });
-        });
-    </script>
+    @await Html.PartialAsync("_AddToWishlistScript")
 }

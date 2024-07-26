@@ -1,7 +1,10 @@
 ﻿using Juan.Data;
+using Juan.Helpers;
 using Juan.Interfaces;
 using Juan.Models;
 using Juan.ViewModels;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
@@ -11,12 +14,14 @@ public class LayoutService : ILayoutService
 {
     private readonly JuanDbContext _context;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly UserManager<AppUser> _userManager;
 
 
-    public LayoutService(JuanDbContext context, IHttpContextAccessor httpContextAccessor)
+    public LayoutService(JuanDbContext context, IHttpContextAccessor httpContextAccessor, UserManager<AppUser> userManager)
     {
         _context = context;
         _httpContextAccessor = httpContextAccessor;
+        _userManager = userManager;
     }
 
     public async Task<IEnumerable<CartVM>> GetCartAsync()
@@ -24,8 +29,8 @@ public class LayoutService : ILayoutService
         if (!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
         {
             var cartCookie = _httpContextAccessor.HttpContext.Request.Cookies["cart"];
-            if (string.IsNullOrEmpty(cartCookie)) return new List<CartVM>();
-            IEnumerable<CartVM> cart = JsonSerializer.Deserialize<IEnumerable<CartVM>>(cartCookie);
+            if (string.IsNullOrEmpty(cartCookie)) return new CartPartialVM();
+            CartPartialVM cart = CartPartialVMConverter.Deserialize(cartCookie);
             foreach (CartVM cartVM in cart)
             {
                 Product product = await _context.Products.FirstOrDefaultAsync(p => p.Id == cartVM.Id);
@@ -37,8 +42,15 @@ public class LayoutService : ILayoutService
         }
         else
         {
-            var cartProducts = _context.CartProducts.Include(c => c.User).Include(c => c.Product).Where(c => c.User.NormalizedUserName == _httpContextAccessor.HttpContext.User.Identity.Name.ToUpperInvariant());
-            List<CartVM> cart = new List<CartVM>();
+            AppUser? appUser = await _userManager.Users.Include(u => u.Coupon).FirstOrDefaultAsync(u => u.UserName == _httpContextAccessor.HttpContext.User.Identity.Name);
+            if (appUser == null) return new List<CartVM>();
+            var cartProducts = _context.CartProducts.Include(c => c.User).Include(c => c.Product).Where(c => c.User.NormalizedUserName == appUser.UserName.ToUpperInvariant());
+            CartPartialVM cart = new();
+            if (appUser.CouponId != null)
+            {
+                cart.Coupon = appUser.Coupon.Name;
+                cart.DiscountRate = appUser.Coupon.Sale;
+            }
             foreach (var cartProduct in cartProducts)
             {
                 var cartVM = new CartVM()
@@ -51,12 +63,11 @@ public class LayoutService : ILayoutService
                 };
                 cart.Add(cartVM);
             }
-            _httpContextAccessor.HttpContext.Response.Cookies.Append("cart", JsonSerializer.Serialize(cart));
+            _httpContextAccessor.HttpContext.Response.Cookies.Append("cart", CartPartialVMConverter.Serialize(cart));
             return cart;
         }
 
     }
-
 
     public async Task UpdateWishlistAsync()
     {

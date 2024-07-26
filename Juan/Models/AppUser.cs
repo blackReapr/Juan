@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Juan.Models;
 
@@ -14,4 +15,7 @@ public class AppUser : IdentityUser
     public List<CartProduct> CartProducts { get; set; }
     public List<Review> Reviews { get; set; }
     public List<Wishlist> Wishlists { get; set; }
+    [AllowNull]
+    public int? CouponId { get; set; }
+    public Coupon? Coupon { get; set; }
 }
