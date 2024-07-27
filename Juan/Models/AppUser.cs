@@ -15,6 +15,7 @@ public class AppUser : IdentityUser
     public List<CartProduct> CartProducts { get; set; }
     public List<Review> Reviews { get; set; }
     public List<Wishlist> Wishlists { get; set; }
+    public List<Order> Orders { get; set; }
     [AllowNull]
     public int? CouponId { get; set; }
     public Coupon? Coupon { get; set; }

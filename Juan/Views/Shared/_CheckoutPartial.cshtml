@@ -1,0 +1,71 @@
+﻿@using Juan.Enums
+@model CartPartialVM
+@if (Model?.Count() > 0)
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Products</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (CartVM cart in ViewBag.Cart)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="product" asp-action="detail" asp-route-id="@cart.Id">@cart.Name <strong> × @cart.Count</strong></a>
+                    </td>
+                    <td>$ @((cart.Count * cart.Price).ToString("0.00"))</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>Sub Total</td>
+                <td><strong>$@Model.Sum(c => c.Price * c.Count).ToString("0.00")</strong></td>
+            </tr>
+            @if (!string.IsNullOrEmpty(Model.Coupon))
+            {
+                <tr>
+                    <td>Coupon: @Model.Coupon</td>
+                    <td><strong>- $@Model.Sum(c => c.Price * c.Count * (Model.DiscountRate / 100)).ToString("0.00")</strong></td>
+
+                </tr>
+            }
+            <tr>
+                <td>Shipping</td>
+                <td class="d-flex justify-content-center">
+                    <ul class="shipping-type">
+                        <li>
+                            <div class="custom-control custom-radio">
+                                <input form="checkout" type="radio" id="@ShippingEnum.FlatRate" value="@ShippingEnum.FlatRate" name="Shipping" class="custom-control-input" checked />
+                                <label class="custom-control-label" for="@ShippingEnum.FlatRate">
+                                    Flat
+                                    Rate: $70.00
+                                </label>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="custom-control custom-radio">
+                                <input form="checkout" type="radio" id="@ShippingEnum.Free" value="@ShippingEnum.Free" name="Shipping" class="custom-control-input" />
+                                <label class="custom-control-label" for="@ShippingEnum.Free">
+                                    Free
+                                    Shipping
+                                </label>
+                            </div>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>Total Amount</td>
+                <td><strong>$@((Model.Sum(c => c.Price * c.Count * ((100 - Model.DiscountRate) / 100)) + 70).ToString("0.00"))</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+}
+else
+{
+    <h3 class="text-center">You do no have any products.</h3>
+}

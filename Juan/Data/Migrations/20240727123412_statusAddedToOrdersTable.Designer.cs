@@ -4,6 +4,7 @@ using Juan.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Juan.Data.Migrations
 {
     [DbContext(typeof(JuanDbContext))]
-    partial class JuanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240727123412_statusAddedToOrdersTable")]
+    partial class statusAddedToOrdersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -264,7 +267,7 @@ namespace Juan.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CouponId")
+                    b.Property<int>("CouponId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
@@ -293,6 +296,7 @@ namespace Juan.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("StateOrDivision")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
@@ -826,7 +830,9 @@ namespace Juan.Data.Migrations
                 {
                     b.HasOne("Juan.Models.Coupon", "Coupon")
                         .WithMany("Orders")
-                        .HasForeignKey("CouponId");
+                        .HasForeignKey("CouponId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Juan.Models.AppUser", "User")
                         .WithMany("Orders")

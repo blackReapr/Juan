@@ -760,16 +760,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script>
         let removeProduct;
-        if (location.href.split("/")[3] != "cart") {
-            removeProduct = id => {
-                axios.delete("/cart/removeproduct/" + id).then(res => {
-                    document.querySelector("#cart").innerHTML = res.data;
-                    document.querySelector(".notification").innerHTML = document.querySelectorAll(".minicart-item").length;
-                    toastr.success("Product removed from your cart!");
-                })
-            };
-        }
-        else {
+        if (location.href.split("/")[3] == "cart") {
             removeProduct = id => {
                 const notification = document.querySelector(".notification");
                 axios.delete("/cart/removeproduct/" + id).then(res => {
@@ -797,6 +788,45 @@
                     })
                 })
             }
+        }
+        else if (location.href.split("/")[3] == "checkout") {
+            removeProduct = id => {
+                const notification = document.querySelector(".notification");
+                axios.delete("/cart/removeproduct/" + id).then(res => {
+                    document.querySelector("#cart").innerHTML = res.data;
+                    notification.innerHTML = document.querySelectorAll(".minicart-item").length;
+                    toastr.options = {
+                        'closeButton': true,
+                        'debug': false,
+                        'newestOnTop': false,
+                        'progressBar': false,
+                        'positionClass': 'toast-top-right',
+                        'preventDuplicates': false,
+                        'showDuration': '1000',
+                        'hideDuration': '1000',
+                        'timeOut': '5000',
+                        'extendedTimeOut': '1000',
+                        'showEasing': 'swing',
+                        'hideEasing': 'linear',
+                        'showMethod': 'fadeIn',
+                        'hideMethod': 'fadeOut',
+                    }
+                    toastr.success("Product has successfully been removed from your cart!");
+                    axios.get("/checkout/checkoutpartial").then(res => {
+                        document.querySelector("#orderTable").innerHTML = res.data;
+                    })
+                })
+            }
+        }
+        else {
+            removeProduct = id => {
+                axios.delete("/cart/removeproduct/" + id).then(res => {
+                    document.querySelector("#cart").innerHTML = res.data;
+                    document.querySelector(".notification").innerHTML = document.querySelectorAll(".minicart-item").length;
+                    toastr.success("Product removed from your cart!");
+                })
+            };
+
         }
     </script>
 

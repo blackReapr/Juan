@@ -4,6 +4,7 @@ using Juan.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Juan.Data.Migrations
 {
     [DbContext(typeof(JuanDbContext))]
-    partial class JuanDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240727103524_ordersTableAdded")]
+    partial class ordersTableAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -257,21 +260,12 @@ namespace Juan.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("CompanyName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CouponId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<decimal>("DiscountRate")
-                        .HasColumnType("money");
 
                     b.Property<string>("MainStreetAddress")
                         .IsRequired()
@@ -293,10 +287,8 @@ namespace Juan.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("StateOrDivision")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<string>("TownOrCity")
                         .IsRequired()
@@ -315,46 +307,9 @@ namespace Juan.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CouponId");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
-                });
-
-            modelBuilder.Entity("Juan.Models.OrderItem", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("Count")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("money");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("OrderItems");
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Juan.Models.Product", b =>
@@ -824,38 +779,13 @@ namespace Juan.Data.Migrations
 
             modelBuilder.Entity("Juan.Models.Order", b =>
                 {
-                    b.HasOne("Juan.Models.Coupon", "Coupon")
-                        .WithMany("Orders")
-                        .HasForeignKey("CouponId");
-
                     b.HasOne("Juan.Models.AppUser", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Coupon");
-
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Juan.Models.OrderItem", b =>
-                {
-                    b.HasOne("Juan.Models.Order", "Order")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Juan.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Juan.Models.ProductCategory", b =>
@@ -1040,14 +970,7 @@ namespace Juan.Data.Migrations
 
             modelBuilder.Entity("Juan.Models.Coupon", b =>
                 {
-                    b.Navigation("Orders");
-
                     b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Juan.Models.Order", b =>
-                {
-                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("Juan.Models.Product", b =>

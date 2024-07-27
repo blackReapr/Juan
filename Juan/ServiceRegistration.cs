@@ -19,6 +19,7 @@ public static class ServiceRegistration
         services.AddControllersWithViews();
         services.AddSession();
         services.AddScoped<ILayoutService, LayoutService>();
+        services.AddHttpClient<IZipCodeValidataionService, ZipCodeValidataionService>();
         services.AddIdentity<AppUser, IdentityRole>(options =>
         {
             options.User.RequireUniqueEmail = true;

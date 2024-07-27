@@ -1,0 +1,194 @@
+﻿@using Juan.Enums
+@model CheckoutVM
+
+@{
+    CartPartialVM cartPartialVm = ViewBag.Cart as CartPartialVM ?? new();
+}
+
+
+<!-- breadcrumb area start -->
+<div class="breadcrumb-area bg-img">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-wrap text-center">
+                    <nav aria-label="breadcrumb">
+                        <h1 class="breadcrumb-title">Checkout</h1>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a asp-controller="home" asp-action="index">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- breadcrumb area end -->
+<!-- checkout main wrapper start -->
+<div class="checkout-page-wrapper section-padding">
+    <div class="container">
+        <div class="row">
+            <!-- Checkout Billing Details -->
+            <div class="col-lg-6">
+                <div class="checkout-billing-details-wrap">
+                    <h4 class="checkout-title">Billing Details</h4>
+                    <div class="billing-form-wrap">
+                        <form method="post" id="checkout">
+                            <div class="single-input-item">
+                                <label asp-for="@Model.CompanyName">Company Name</label>
+                                <input asp-for="@Model.CompanyName" placeholder="Company Name" />
+                            </div>
+
+                            <div class="single-input-item">
+                                <label asp-for="@Model.Country" class="required">Country</label>
+                                <select asp-for="@Model.Country">
+                                    <option value="Afghanistan">Afghanistan</option>
+                                    <option value="Albania">Albania</option>
+                                    <option value="Algeria">Algeria</option>
+                                    <option value="Azerbaijan">Azerbaijan</option>
+                                    <option value="Bangladesh">Bangladesh</option>
+                                    <option value="India">India</option>
+                                    <option value="Pakistan">Pakistan</option>
+                                    <option value="England">England</option>
+                                    <option value="London">London</option>
+                                    <option value="London">London</option>
+                                    <option value="China">China</option>
+                                </select>
+                                <span asp-validation-for="@Model.Country" class="text-danger"></span>
+                            </div>
+
+                            <div class="single-input-item">
+                                <label asp-for="@Model.MainStreetAddress" class="required mt-20">Street address</label>
+                                <input asp-for="@Model.MainStreetAddress" placeholder="Street address Line 1" />
+                                <span asp-validation-for="@Model.MainStreetAddress" class="text-danger"></span>
+                            </div>
+
+                            <div class="single-input-item">
+                                <input asp-for="@Model.SecondaryStreetAddress" placeholder="Street address Line 2 (Optional)" />
+                                <span asp-validation-for="@Model.SecondaryStreetAddress" class="text-danger"></span>
+                            </div>
+
+                            <div class="single-input-item">
+                                <label asp-for="@Model.TownOrCity" class="required">Town / City</label>
+                                <input asp-for="@Model.TownOrCity" placeholder="Town / City" />
+                                <span asp-validation-for="@Model.TownOrCity" class="text-danger"></span>
+                            </div>
+
+                            <div class="single-input-item">
+                                <label asp-for="@Model.StateOrDivision">State / Divition</label>
+                                <input asp-for="@Model.StateOrDivision" placeholder="State / Divition" />
+                                <span asp-validation-for="@Model.StateOrDivision" class="text-danger"></span>
+                            </div>
+
+                            <div class="single-input-item">
+                                <label asp-for="@Model.Zip" class="required">Postcode / ZIP</label>
+                                <input asp-for="@Model.Zip" placeholder="Postcode / ZIP" />
+                                <span asp-validation-for="@Model.Zip" class="text-danger"></span>
+                            </div>
+
+                            <div class="single-input-item">
+                                <label asp-for="@Model.Phone">Phone</label>
+                                <input asp-for="@Model.Phone" placeholder="Phone" />
+                                <span asp-validation-for="@Model.Phone" class="text-danger"></span>
+                            </div>
+
+                            <div class="single-input-item">
+                                <label asp-for="@Model.OrderNote">Order Note</label>
+                                <textarea asp-for="@Model.OrderNote" cols="30" rows="3" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Summary Details -->
+            <div class="col-lg-6">
+                <div class="order-summary-details">
+                    <h4 class="checkout-title">Your Order Summary</h4>
+                    <div class="order-summary-content">
+                        <!-- Order Summary Table -->
+                        <div id="orderTable" class="order-summary-table table-responsive text-center">
+                            @await Html.PartialAsync("_CheckoutPartial", cartPartialVm)
+                        </div>
+                        <!-- Order Payment Method -->
+                        <div class="order-payment-method">
+                            <div class="single-payment-method show">
+                                <div class="payment-method-name">
+                                    <div class="custom-control custom-radio">
+                                        <input form="checkout" type="radio" asp-for="@Model.PaymentMethod" value=@PaymentEnum.Cash id="@PaymentEnum.Cash" class="custom-control-input" checked />
+                                        <label class="custom-control-label" for="@PaymentEnum.Cash">Cash On Delivery</label>
+                                    </div>
+                                </div>
+                                <div class="payment-method-details" data-method="cash">
+                                    <p>Pay with cash upon delivery.</p>
+                                </div>
+                            </div>
+                            <div class="single-payment-method">
+                                <div class="payment-method-name">
+                                    <div class="custom-control custom-radio">
+                                        <input form="checkout" type="radio" asp-for="@Model.PaymentMethod" value="@PaymentEnum.Bank" id="@PaymentEnum.Bank" class="custom-control-input" />
+                                        <label class="custom-control-label" for="@PaymentEnum.Bank">
+                                            Direct Bank
+                                            Transfer
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="payment-method-details" data-method="bank">
+                                    <p>
+                                        Make your payment directly into our bank account. Please use your Order
+                                        ID as the payment reference. Your order will not be shipped until the
+                                        funds have cleared in our account..
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="single-payment-method">
+                                <div class="payment-method-name">
+                                    <div class="custom-control custom-radio">
+                                        <input form="checkout" type="radio" asp-for="@Model.PaymentMethod" value="@PaymentEnum.Check" id="@PaymentEnum.Check" class="custom-control-input" />
+                                        <label class="custom-control-label" for="@PaymentEnum.Check">
+                                            Pay with
+                                            Check
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="payment-method-details" data-method="check">
+                                    <p>
+                                        Please send a check to Store Name, Store Street, Store Town, Store State
+                                        / County, Store Postcode.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="single-payment-method">
+                                <div class="payment-method-name">
+                                    <div class="custom-control custom-radio">
+                                        <input form="checkout" type="radio" asp-for="@Model.PaymentMethod" value="@PaymentEnum.Paypal" id="@PaymentEnum.Paypal" class="custom-control-input" />
+                                        <label class="custom-control-label" for="@PaymentEnum.Paypal">Paypal <img src="~/assets/img/paypal-card.jpg" class="img-fluid paypal-card" alt="Paypal" /></label>
+                                    </div>
+                                </div>
+                                <div class="payment-method-details" data-method="paypal">
+                                    <p>
+                                        Pay via PayPal; you can pay with your credit card if you don’t have a
+                                        PayPal account.
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="summary-footer-area">
+                                <div class="custom-control custom-checkbox mb-20">
+                                    <input form="checkout" asp-for="@Model.Terms" class="custom-control-input" />
+                                    <label class="custom-control-label" asp-for="@Model.Terms">
+                                        I have read and agree to
+                                        the website terms and conditions.
+                                    </label>
+                                    <span asp-validation-for="@Model.Terms" class="text-danger"></span>
+                                </div>
+                                <button form="checkout" type="submit" class="btn btn-sqr">Place Order</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- checkout main wrapper end -->
