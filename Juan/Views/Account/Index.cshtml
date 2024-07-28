@@ -61,29 +61,36 @@
                                     <div class="myaccount-content">
                                         <h3>Orders</h3>
                                         <div class="myaccount-table table-responsive text-center">
-                                            <table class="table table-bordered">
-                                                <thead class="thead-light">
-                                                    <tr>
-                                                        <th>Order</th>
-                                                        <th>Date</th>
-                                                        <th>Status</th>
-                                                        <th>Total</th>
-                                                        <th>Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach (Order order in Model.Orders)
-                                                    {
+                                            @if (Model.Orders.Any())
+                                            {
+                                                <table class="table table-bordered">
+                                                    <thead class="thead-light">
                                                         <tr>
-                                                            <td>@order.Id</td>
-                                                            <td>@order.CreatedAt.ToShortDateString()</td>
-                                                            <td>@order.Status</td>
-                                                            <td>$@(((order.OrderItems.Sum(oi => order.DiscountRate == 0 ? oi.Price * oi.Count : oi.Price * oi.Count * (100 - order.DiscountRate) / 100)) + (order.Shipping == ShippingEnum.FlatRate ? 70 : 0)).ToString("0.00"))</td>
-                                                            <td><a href="cart.html" class="btn">View</a></td>
+                                                            <th>Order</th>
+                                                            <th>Date</th>
+                                                            <th>Status</th>
+                                                            <th>Total</th>
+                                                            <th>Action</th>
                                                         </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (Order order in Model.Orders)
+                                                        {
+                                                            <tr>
+                                                                <td>@order.Id</td>
+                                                                <td>@order.CreatedAt.ToShortDateString()</td>
+                                                                <td>@order.Status</td>
+                                                                <td>$@(((order.OrderItems.Sum(oi => order.DiscountRate == 0 ? oi.Price * oi.Count : oi.Price * oi.Count * (100 - order.DiscountRate) / 100)) + (order.Shipping == ShippingEnum.FlatRate ? 70 : 0)).ToString("0.00"))</td>
+                                                                <td><a href="cart.html" class="btn">View</a></td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            }
+                                            else
+                                            {
+                                                <h3 class="text-center">You do not have any orders</h3>
+                                            }
                                         </div>
                                     </div>
                                 </div>

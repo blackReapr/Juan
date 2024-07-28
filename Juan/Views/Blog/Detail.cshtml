@@ -1,0 +1,232 @@
+﻿@model BlogVM
+<!-- breadcrumb area start -->
+<div class="breadcrumb-area bg-img">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="breadcrumb-wrap text-center">
+                    <nav aria-label="breadcrumb">
+                        <h1 class="breadcrumb-title">Blog</h1>
+                        <ul class="breadcrumb">
+                            <li class="breadcrumb-item"><a asp-controller="home" asp-action="index">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Blog Details</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- breadcrumb area end -->
+<!-- blog main wrapper start -->
+<div class="blog-main-wrapper section-padding">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 order-2">
+                <div class="blog-widget-wrapper">
+                    <!-- widget item start -->
+                    <div class="blog-widget">
+                        <div class="blog-widget-img">
+                            <img src="~/assets/img/users/@Model.Blog.User?.Profile" alt="@Model.Blog.User.UserName" />
+                        </div>
+                        <div class="blog-author-title text-center">
+                            <h5>@Model.Blog.User.UserName</h5>
+                            <span>@(Model.Blog.User.Profession ?? Model.Blog.User.Email)</span>
+                            <div class="blog-widget-icon">
+                                @if (Model.Blog.User.Facebook != null)
+                                {
+                                    <a href="@Model.Blog.User.Facebook"><i class="fa fa-facebook"></i></a>
+                                }
+                                @if (Model.Blog.User.Twitter != null)
+                                {
+                                    <a href="@Model.Blog.User.Twitter"><i class="fa fa-twitter"></i></a>
+                                }
+                                @if (Model.Blog.User.Vimeo != null)
+                                {
+                                    <a href="@Model.Blog.User.Vimeo"><i class="fa fa-vimeo"></i></a>
+                                }
+                                @if (Model.Blog.User.Twitter != null)
+                                {
+                                    <a href="@Model.Blog.User.Twitter"><i class="fa fa-pinterest-p"></i></a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <!-- widget item end -->
+                    <!-- widget item start -->
+                    <div class="blog-widget">
+                        <h4 class="blog-widget-title">Search</h4>
+                        <form class="widget-search-form">
+                            <input placeholder="Search keyword" type="text" class="search-field">
+                            <button type="submit" class="search-btn"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                    <!-- widget item end -->
+                    <!-- widget item start -->
+                    <div class="blog-widget">
+                        <h4 class="blog-widget-title">Recent Posts</h4>
+                        <ul class="recent-posts-inner">
+                            @foreach (Blog blog in Model.Blogs)
+                            {
+                                <li class="recent-posts">
+                                    <div class="recent-posts-image">
+                                        <a href="blog-details.html"><img src="~/assets/img/blog/@blog.Image" alt="@blog.Title"></a>
+                                    </div>
+                                    <div class="recent-posts-body">
+                                        <span class="recent-posts-meta">@blog.CreatedAt.ToShortDateString()</span>
+                                        <h6 class="recent-posts-title"><a asp-controller="blog" asp-action="detail" asp-route-id="@blog.Id">@blog.Title</a></h6>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    <!-- widget item end -->
+                    <!-- widget item start -->
+                    <div class="blog-widget">
+                        <h4 class="blog-widget-title">Categories</h4>
+                        <ul class="blog-categories">
+                            <li><a href="blog-details.html">Shoes</a><span>(20)</span></li>
+                            <li><a href="blog-details.html">Fashion</a><span>(18)</span></li>
+                            <li><a href="blog-details.html">Wallet</a><span>(40)</span></li>
+                            <li><a href="blog-details.html">Life Style</a><span>(66)</span></li>
+                            <li><a href="blog-details.html">Electronics</a><span>(66)</span></li>
+                            <li><a href="blog-details.html">Jewellery & Cosmetics</a><span>(30)</span></li>
+                        </ul>
+                    </div>
+                    <!-- widget item end -->
+                    <!-- widget item start -->
+                    <div class="blog-widget">
+                        <h4 class="blog-widget-title">Tags</h4>
+                        <div class="blog-tag">
+                            <a href="blog-details.html">Fashion</a>
+                            <a href="blog-details.html">Shoes</a>
+                            <a href="blog-details.html">Wallet</a>
+                            <a href="blog-details.html">Bags</a>
+                            <a href="blog-details.html">Jewelery</a>
+                        </div>
+                    </div>
+                    <!-- widget item end -->
+                </div>
+            </div>
+            <div class="col-lg-9 order-1">
+                <div class="row">
+                    <div class="col-12">
+                        <!-- blog single item start -->
+                        <div class="blog-post-item">
+                            <div class="blog-thumb">
+                                <img src="~/assets/img/blog/@Model.Blog.Image" alt="blog thumb">
+                            </div>
+                            <div class="blog-content blog-details">
+                                <h5 class="blog-title">
+                                    @Model.Blog.Title
+                                </h5>
+                                <ul class="blog-meta">
+                                    <li><span>By: </span>@Model.Blog.User.UserName,</li>
+                                    <li><span>On: </span>@Model.Blog.CreatedAt.ToShortDateString()</li>
+                                </ul>
+                                @Html.Raw(Model.Blog.Description)
+                            </div>
+                        </div>
+                        <!-- blog single item start -->
+                        <!-- comment area start -->
+                        <div class="comment-section section-padding">
+                            <h5>03 Comment</h5>
+                            <ul>
+                                <li>
+                                    <div class="author-avatar">
+                                        <img src="assets/img/blog/comment-icon.png" alt="">
+                                    </div>
+                                    <div class="comment-body">
+                                        <span class="reply-btn"><a href="#">Reply</a></span>
+                                        <h5 class="comment-author">Admin</h5>
+                                        <div class="comment-post-date">
+                                            15 Dec, 2019 at 9:30pm
+                                        </div>
+                                        <p>
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim maiores
+                                            adipisci optio ex, laboriosam facilis non pariatur itaque illo sunt?
+                                        </p>
+                                    </div>
+                                </li>
+                                <li class="comment-children">
+                                    <div class="author-avatar">
+                                        <img src="assets/img/blog/comment-icon.png" alt="">
+                                    </div>
+                                    <div class="comment-body">
+                                        <span class="reply-btn"><a href="#">Reply</a></span>
+                                        <h5 class="comment-author">Admin</h5>
+                                        <div class="comment-post-date">
+                                            20 Nov, 2019 at 9:30pm
+                                        </div>
+                                        <p>
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim maiores
+                                            adipisci optio ex, laboriosam facilis non pariatur itaque illo sunt?
+                                        </p>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="author-avatar">
+                                        <img src="~/assets/img/blog/comment-icon.png" alt="">
+                                    </div>
+                                    <div class="comment-body">
+                                        <span class="reply-btn"><a href="#">Reply</a></span>
+                                        <h5 class="comment-author">Admin</h5>
+                                        <div class="comment-post-date">
+                                            25 Jan, 2019 at 9:30pm
+                                        </div>
+                                        <p>
+                                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim maiores
+                                            adipisci optio ex, laboriosam facilis non pariatur itaque illo sunt?
+                                        </p>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- comment area end -->
+                        <!-- start blog comment box -->
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <div class="blog-comment-wrapper">
+                                <h5>Leave A Reply</h5>
+                                <p>Email address will not be published. Required fields are marked *</p>
+                                <form action="#">
+                                    <div class="comment-post-box">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <label>Comment</label>
+                                                <textarea name="commnet" placeholder="Write a comment"></textarea>
+                                            </div>
+                                            <div class="col-lg-4 col-md-4">
+                                                <label>Name</label>
+                                                <input type="text" class="coment-field" placeholder="Name">
+                                            </div>
+                                            <div class="col-lg-4 col-md-4">
+                                                <label>Email</label>
+                                                <input type="text" class="coment-field" placeholder="Email">
+                                            </div>
+                                            <div class="col-lg-4 col-md-4">
+                                                <label>Website</label>
+                                                <input type="text" class="coment-field" placeholder="Website">
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="coment-btn">
+                                                    <input class="btn" type="submit" name="submit" value="POST COMMENT">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        }
+                        else
+                        {
+                            <h3 class="text-center">You have to be authenticated to post a comment</h3>
+                        }
+                        <!-- start blog comment box -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- blog main wrapper end -->

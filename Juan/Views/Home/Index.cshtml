@@ -276,21 +276,21 @@
                         <!-- blog single item start -->
                         <div class="blog-post-item">
                             <div class="blog-thumb">
-                                <a asp-controller="blog" asp-action="index" asp-route-id="@blog.Id">
+                                <a asp-controller="blog" asp-action="detail" asp-route-id="@blog.Id">
                                     <img src="~/assets/img/blog/@blog.Image" alt="@blog.Title" />
                                 </a>
                             </div>
                             <div class="blog-content">
                                 <h5 class="blog-title">
-                                    <a asp-controller="blog" asp-action="index" asp-route-id="@blog.Id">
+                                    <a asp-controller="blog" asp-action="detail" asp-route-id="@blog.Id">
                                         @blog.Title
                                     </a>
                                 </h5>
                                 <ul class="blog-meta">
-                                    <li><span>By: </span>Admin,</li>
+                                    <li><span>By: </span>@blog.User.UserName,</li>
                                     <li><span>On: </span>@blog.CreatedAt.ToShortDateString()</li>
                                 </ul>
-                                <a asp-controller="blog" asp-action="index" asp-route-id="@blog.Id" class="read-more">Read More...</a>
+                                <a asp-controller="blog" asp-action="detail" asp-route-id="@blog.Id" class="read-more">Read More...</a>
                             </div>
                         </div>
                         <!-- blog single item start -->

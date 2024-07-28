@@ -69,10 +69,6 @@
                                     <td>Sub Total</td>
                                     <td>$@Model.Sum(p => p.Price * p.Count).ToString("0.00")</td>
                                 </tr>
-                                <tr>
-                                    <td>Shipping</td>
-                                    <td>$70</td>
-                                </tr>
                                 @if (!string.IsNullOrEmpty(Model.Coupon))
                                 {
                                     <tr id="activeCoupon">

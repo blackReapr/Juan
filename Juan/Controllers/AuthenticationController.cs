@@ -1,4 +1,5 @@
-﻿using Juan.Models;
+﻿using Juan.Data;
+using Juan.Models;
 using Juan.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,17 +12,17 @@ public class AuthenticationController : Controller
 {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
+    private readonly JuanDbContext _context;
 
-    public AuthenticationController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+    public AuthenticationController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JuanDbContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _context = context;
     }
 
-    public IActionResult Register()
-    {
-        return View();
-    }
+    public IActionResult Register() => View();
+
     [HttpPost, AutoValidateAntiforgeryToken]
     public async Task<IActionResult> Register(RegisterVM registerVM)
     {
@@ -36,7 +37,17 @@ public class AuthenticationController : Controller
             }
             return View(registerVM);
         }
-        //await _userManager.AddToRoleAsync(user, "member");
+        await _userManager.AddToRoleAsync(user, "member");
+        if (registerVM.Subscribe)
+        {
+            Subscribe subscribe = new()
+            {
+                UserId = user.Id,
+            };
+
+            await _context.Subscribes.AddAsync(subscribe);
+            await _context.SaveChangesAsync();
+        }
 
         return RedirectToAction(nameof(Login));
     }
