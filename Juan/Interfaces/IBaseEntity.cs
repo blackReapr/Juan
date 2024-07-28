@@ -1,8 +1,6 @@
-﻿using Juan.Interfaces;
+﻿namespace Juan.Interfaces;
 
-namespace Juan.Models;
-
-public class BaseEntity : IBaseEntity
+public interface IBaseEntity
 {
     public int Id { get; set; }
     public DateTime CreatedAt { get; set; }

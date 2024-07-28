@@ -17,7 +17,7 @@ public class BlogController : Controller
 
     public async Task<IActionResult> Detail(int? id)
     {
-        Blog? blog = await _context.Blogs.Include(b => b.User).AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
+        Blog? blog = await _context.Blogs.Include(b => b.BlogTags).ThenInclude(bt => bt.Tag).Include(b => b.User).AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
         if (blog == null) return NotFound();
         IEnumerable<Blog> blogs = await _context.Blogs.AsNoTracking().OrderByDescending(b => b.CreatedAt).Take(4).ToListAsync();
         BlogVM vm = new()

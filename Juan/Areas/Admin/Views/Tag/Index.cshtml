@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Tag>
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Tags</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-area="admin" asp-controller="home" asp-action="index">Dashboard</a></li>
+        <li class="breadcrumb-item active">Tables</li>
+    </ol>
+    <a asp-controller="tag" asp-action="create" class="btn btn-outline-primary mb-3">Create Tag</a>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Tags Table
+        </div>
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Name</th>
+                        <th>Created At</th>
+                        <th>Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Tag tag in Model)
+                    {
+                        <tr>
+                            <td>@tag.Id</td>
+                            <td>@tag.Name</td>
+                            <td>@tag.CreatedAt.ToShortDateString()</td>
+                            <td>
+                                <a asp-controller="tag" asp-action="update" asp-route-id="@tag.Id" class="btn btn-info">update</a>
+                                <a asp-controller="tag" asp-action="delete" asp-route-id="@tag.Id" class="btn btn-info">delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

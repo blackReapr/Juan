@@ -14,4 +14,7 @@ public class Blog : BaseEntity
     public IFormFile? Photo { get; set; }
     public string? UserId { get; set; }
     public AppUser? User { get; set; }
+    public List<BlogTag>? BlogTags { get; set; }
+    [NotMapped]
+    public List<int>? TagIds { get; set; }
 }

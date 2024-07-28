@@ -18,6 +18,7 @@
                         <th>Title</th>
                         <th>Description</th>
                         <th>Author</th>
+                        <th>Tags</th>
                         <th>Image</th>
                         <th>Created At</th>
                         <th>Settings</th>
@@ -30,6 +31,12 @@
                             <td>@blog.Title</td>
                             <td>@Html.Raw(blog.Description)</td>
                             <td>@blog.User.UserName</td>
+                            <td>
+                                @foreach (BlogTag blogTag in blog.BlogTags)
+                                {
+                                    @blogTag.Tag.Name
+                                }
+                            </td>
                             <td>
                                 <img width="50" height="50" src="~/assets/img/blog/@blog.Image" />
                             </td>

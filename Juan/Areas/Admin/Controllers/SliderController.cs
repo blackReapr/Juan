@@ -4,7 +4,6 @@ using Juan.Helpers;
 using Juan.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
 namespace Juan.Areas.Admin.Controllers;
 
@@ -20,7 +19,7 @@ public class SliderController : Controller
 
     public async Task<IActionResult> Index()
     {
-        IEnumerable<Slider> sliders = await _context.Sliders.ToListAsync();
+        IEnumerable<Slider> sliders = await _context.Sliders.AsNoTracking().ToListAsync();
         return View(sliders);
     }
 

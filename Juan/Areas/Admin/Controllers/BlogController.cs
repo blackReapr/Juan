@@ -22,15 +22,20 @@ public class BlogController : Controller
 
     public async Task<IActionResult> Index()
     {
-        IEnumerable<Blog> blogs = await _context.Blogs.Include(b => b.User).ToListAsync();
+        IEnumerable<Blog> blogs = await _context.Blogs.Include(b => b.BlogTags).ThenInclude(bt => bt.Tag).Include(b => b.User).AsNoTracking().ToListAsync();
         return View(blogs);
     }
 
-    public IActionResult Create() => View();
+    public async Task<IActionResult> Create()
+    {
+        ViewBag.Tags = await _context.Tags.AsNoTracking().ToListAsync();
+        return View();
+    }
 
     [HttpPost, AutoValidateAntiforgeryToken]
     public async Task<IActionResult> Create(Blog blog)
     {
+        ViewBag.Tags = await _context.Tags.AsNoTracking().ToListAsync();
         if (!ModelState.IsValid) return View(blog);
         AppUser? appUser = await _userManager.FindByNameAsync(User.Identity.Name);
         if (appUser == null) return BadRequest();
@@ -40,6 +45,30 @@ public class BlogController : Controller
             foreach (string error in errors) ModelState.AddModelError("Photo", error);
             return View(blog);
         }
+        if (blog.TagIds.Count == 0)
+        {
+            ModelState.AddModelError("TagIds", "At least one tag must be included.");
+            return View(blog);
+        }
+
+        foreach (var item in blog.TagIds)
+        {
+            if (!await _context.Tags.AnyAsync(t => t.Id == item))
+            {
+                ModelState.AddModelError("TagIds", "Invalid tag id.");
+                return View(blog);
+            }
+        }
+
+        foreach (var tagId in blog.TagIds)
+        {
+            Tag tag = await _context.Tags.FirstOrDefaultAsync(t => t.Id == tagId);
+            BlogTag blogTag = new BlogTag();
+            blogTag.TagId = tagId;
+            blogTag.BlogId = blog.Id;
+            await _context.BlogTags.AddAsync(blogTag);
+        }
+
         string filename = await blog.Photo.SaveFileAsync("blog");
         blog.Image = filename;
         blog.UserId = appUser.Id;
@@ -81,6 +110,30 @@ public class BlogController : Controller
 
             string filename = await blog.Photo.SaveFileAsync("slider");
             existingBlog.Image = filename;
+        }
+
+        if (blog.TagIds.Count == 0)
+        {
+            ModelState.AddModelError("TagIds", "At least one tag must be included.");
+            return View(blog);
+        }
+
+        foreach (var item in blog.TagIds)
+        {
+            if (!await _context.Tags.AnyAsync(t => t.Id == item))
+            {
+                ModelState.AddModelError("TagIds", "Invalid tag id.");
+                return View(blog);
+            }
+        }
+
+        foreach (var tagId in blog.TagIds)
+        {
+            Tag tag = await _context.Tags.FirstOrDefaultAsync(t => t.Id == tagId);
+            BlogTag blogTag = new BlogTag();
+            blogTag.TagId = tagId;
+            blogTag.BlogId = blog.Id;
+            await _context.BlogTags.AddAsync(blogTag);
         }
 
         existingBlog.Title = blog.Title;

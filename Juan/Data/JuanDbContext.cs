@@ -23,6 +23,8 @@ public class JuanDbContext : IdentityDbContext<AppUser>
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<Subscribe> Subscribes { get; set; }
+    public DbSet<Tag> Tags { get; set; }
+    public DbSet<BlogTag> BlogTags { get; set; }
     public JuanDbContext(DbContextOptions options) : base(options) { }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
