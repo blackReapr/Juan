@@ -1,0 +1,63 @@
+﻿@model Announcement
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Create Form</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-area="admin" asp-controller="home" asp-action="index">Dashboard</a></li>
+        <li class="breadcrumb-item active">Make an Annoucement</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Create Annoucement
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div class="form-group">
+                    <label asp-for="@Model.Title"></label>
+                    <input asp-for="@Model.Title" class="form-control" placeholder="Enter title">
+                    <span asp-validation-for="@Model.Title" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Content"></label>
+                    <textarea asp-for="@Model.Content" class="form-control" placeholder="Enter content"></textarea>
+                    <span asp-validation-for="@Model.Content" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type="importmap">
+    {
+        "imports": {
+            "ckeditor5": "../../assets/vendor/ckeditor5.js",
+            "ckeditor5/": "../../assets/vendor/"
+        }
+    }
+</script>
+<script type="module">
+    import {
+        ClassicEditor,
+        Essentials,
+        Paragraph,
+        Bold,
+        Italic,
+        Font
+    } from 'ckeditor5';
+
+    ClassicEditor
+        .create(document.querySelector('#Content'), {
+            plugins: [Essentials, Paragraph, Bold, Italic, Font],
+            toolbar: [
+                'undo', 'redo', '|', 'bold', 'italic', '|',
+                'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+            ]
+        })
+        .then(editor => {
+            window.editor = editor;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>

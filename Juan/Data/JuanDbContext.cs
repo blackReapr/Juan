@@ -25,7 +25,7 @@ public class JuanDbContext : IdentityDbContext<AppUser>
     public DbSet<Subscribe> Subscribes { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<BlogTag> BlogTags { get; set; }
-    public DbSet<Annoucement> Annoucements { get; set; }
+    public DbSet<Announcement> Announcements { get; set; }
     public JuanDbContext(DbContextOptions options) : base(options) { }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

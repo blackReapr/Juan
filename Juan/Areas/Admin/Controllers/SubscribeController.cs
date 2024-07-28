@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Juan.Areas.Admin.Controllers;
 
+[Area("admin")]
 public class SubscribeController : Controller
 {
     private readonly JuanDbContext _context;

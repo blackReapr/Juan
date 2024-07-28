@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Juan.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace Juan.Models;
 
-public class Tag : BaseEntity
+public class Tag : BaseEntity, IDefaultEntity
 {
     [Required]
     public string Name { get; set; }

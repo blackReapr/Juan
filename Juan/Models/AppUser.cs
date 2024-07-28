@@ -21,6 +21,7 @@ public class AppUser : IdentityUser
     public List<Review> Reviews { get; set; }
     public List<Wishlist> Wishlists { get; set; }
     public List<Order> Orders { get; set; }
+    public List<Announcement> Annoucements { get; set; }
     [AllowNull]
     public int? CouponId { get; set; }
     public Coupon? Coupon { get; set; }

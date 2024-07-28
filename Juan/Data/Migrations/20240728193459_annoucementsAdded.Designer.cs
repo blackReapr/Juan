@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Juan.Data.Migrations
 {
     [DbContext(typeof(JuanDbContext))]
-    [Migration("20240728190336_annoucementsAdded")]
+    [Migration("20240728193459_annoucementsAdded")]
     partial class annoucementsAdded
     {
         /// <inheritdoc />
@@ -33,17 +33,23 @@ namespace Juan.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasMaxLength(5000)
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Annoucements");
                 });
@@ -898,6 +904,15 @@ namespace Juan.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Juan.Models.Annoucement", b =>
+                {
+                    b.HasOne("Juan.Models.AppUser", "User")
+                        .WithMany("Annoucements")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Juan.Models.AppUser", b =>
                 {
                     b.HasOne("Juan.Models.Coupon", "Coupon")
@@ -1162,6 +1177,8 @@ namespace Juan.Data.Migrations
 
             modelBuilder.Entity("Juan.Models.AppUser", b =>
                 {
+                    b.Navigation("Annoucements");
+
                     b.Navigation("CartProducts");
 
                     b.Navigation("Orders");
