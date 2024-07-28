@@ -230,7 +230,7 @@
                                         <span><i class="ion-android-star"></i></span>
                                     </div>
                                     <div class="product-link-2">
-                                        <a href="#" data-toggle="tooltip" title="Wishlist">
+                                        <a asp-controller="wishlist" asp-action="new" asp-route-id="@product.Id" data-toggle="tooltip" title="Wishlist" class="wishlistBtn">
                                             <i class="ion-android-favorite-outline"></i>
                                         </a>
                                         <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" class="addToCart" data-toggle="tooltip" title="Add To Cart">

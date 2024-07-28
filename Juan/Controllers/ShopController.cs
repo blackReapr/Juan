@@ -19,7 +19,7 @@ public class ShopController : Controller
     {
         IEnumerable<Size> sizes = await _context.Sizes.AsNoTracking().ToListAsync();
         IEnumerable<Color> colors = await _context.Colors.AsNoTracking().ToListAsync();
-        IQueryable<Product> query = _context.Products;
+        IQueryable<Product> query = _context.Products.AsNoTracking();
 
         if (color != null) query = query.Where(p => p.ProductColors.Any(pc => pc.Color.Name == color));
         if (size != null) query = query.Where(p => p.ProductSizes.Any(ps => ps.Size.Name == color));

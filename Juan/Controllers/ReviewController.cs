@@ -21,9 +21,9 @@ public class ReviewController : Controller
     public async Task<IActionResult> Reviews(int? id)
     {
         if (id == null) return BadRequest();
-        Product? product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        Product? product = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
-        IEnumerable<Review> reviews = await _context.Reviews.Include(r => r.User).Where(r => r.ProductId == product.Id).ToListAsync();
+        IEnumerable<Review> reviews = await _context.Reviews.AsNoTracking().Include(r => r.User).Where(r => r.ProductId == product.Id).ToListAsync();
         return PartialView("_ReviewPartial", reviews);
     }
 
@@ -33,7 +33,7 @@ public class ReviewController : Controller
         string content = reviewVM.Content;
         int rating = reviewVM.Rating;
         if (id == null) return BadRequest();
-        Product? product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        Product? product = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
         IDictionary<string, string> errors = new Dictionary<string, string>();
         if (string.IsNullOrEmpty(content)) errors["content"] = "Content is required";
@@ -55,8 +55,8 @@ public class ReviewController : Controller
         review.Rating = rating;
         review.Content = content;
         _context.Reviews.Add(review);
-        IEnumerable<Review> reviews = await _context.Reviews.Include(r => r.User).Where(r => r.ProductId == product.Id).ToListAsync();
-        reviews = reviews.Append(review);
+        List<Review> reviews = await _context.Reviews.Include(r => r.User).Where(r => r.ProductId == product.Id).ToListAsync();
+        reviews.Add(review);
         await _context.SaveChangesAsync();
         return PartialView("_ReviewPartial", reviews);
     }

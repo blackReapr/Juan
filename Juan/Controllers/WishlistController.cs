@@ -35,7 +35,7 @@ public class WishlistController : Controller
         IDictionary<string, string> data = new Dictionary<string, string>();
 
 
-        Product? product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        Product? product = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
 
         WishlistVM? existingWishlistVM = wishlistCookie.FirstOrDefault(w => w.Id == id);
@@ -82,7 +82,7 @@ public class WishlistController : Controller
     public async Task<IActionResult> RemoveProduct(int? id)
     {
         if (id == null) return BadRequest();
-        Product? product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+        Product? product = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         if (product == null) return NotFound();
         var wishlistCookie = JsonSerializer.Deserialize<List<WishlistVM>>(Request.Cookies["wishlist"]);
 

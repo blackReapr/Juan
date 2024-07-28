@@ -17,7 +17,7 @@ public class ProductController : Controller
     public async Task<IActionResult> Modal(int? id)
     {
         if (id == null) return BadRequest();
-        Product? product = await _context.Products.Include(p => p.ProductImages).FirstOrDefaultAsync(x => x.Id == id);
+        Product? product = await _context.Products.AsNoTracking().Include(p => p.ProductImages).FirstOrDefaultAsync(x => x.Id == id);
         if (product == null) return NotFound();
         return PartialView("_ProductModalPartial", product);
     }
@@ -26,6 +26,7 @@ public class ProductController : Controller
     {
         if (id == null) return BadRequest();
         Product? product = await _context.Products
+            .AsNoTracking()
             .Include(p => p.ProductColors)
             .ThenInclude(c => c.Color)
             .Include(p => p.ProductSizes)
