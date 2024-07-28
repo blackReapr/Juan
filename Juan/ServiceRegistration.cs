@@ -12,6 +12,7 @@ public static class ServiceRegistration
     public static void Register(this IServiceCollection services, ConfigurationManager configuration)
     {
         services.AddSingleton<Interceptor>();
+        services.AddHttpContextAccessor();
         services.AddDbContext<JuanDbContext>((sp, options) => options
         .UseSqlServer(configuration
         .GetConnectionString("Default"))
