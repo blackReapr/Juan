@@ -1,7 +1,9 @@
-﻿namespace Juan.Models;
+﻿using Juan.Interfaces;
 
-public class Category : BaseEntity
+namespace Juan.Models;
+
+public class Category : BaseEntity, IDefaultEntity
 {
     public string Name { get; set; }
-    public List<ProductCategory> ProductCategories { get; set; }
+    public List<ProductCategory>? ProductCategories { get; set; }
 }
