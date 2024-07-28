@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Subscribe>
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Subscribers</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-area="admin" asp-controller="home" asp-action="index">Dashboard</a></li>
+        <li class="breadcrumb-item active">Tables</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Subscribers Table
+        </div>
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Subscriber Since</th>
+                        <th>Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Subscribe subscribe in Model)
+                    {
+                        <tr>
+                            <td>@subscribe.User.UserName</td>
+                            <td>@subscribe.User.Email</td>
+                            <td>@subscribe.CreatedAt.ToShortDateString()</td>
+                            <td>
+                                <a asp-controller="subscribe" asp-action="delete" asp-route-id="@subscribe.Id" class="btn btn-info">unsubscribe</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
