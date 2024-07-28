@@ -4,6 +4,7 @@ using Juan.Helpers;
 using Juan.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace Juan.Areas.Admin.Controllers;
 
@@ -68,7 +69,7 @@ public class SliderController : Controller
                 return View(slider);
             }
 
-            DeleteFile.Delete(existingSlider.Image);
+            DeleteFile.Delete(existingSlider.Image, "slider");
 
             string filename = await slider.Photo.SaveFileAsync("slider");
             existingSlider.Image = filename;
@@ -87,6 +88,7 @@ public class SliderController : Controller
         if (id == null) return BadRequest();
         Slider? slider = await _context.Sliders.FirstOrDefaultAsync(s => s.Id == id);
         if (slider == null) return NotFound();
+        DeleteFile.Delete(slider.Image, "slider");
         _context.Sliders.Remove(slider);
         await _context.SaveChangesAsync();
         return RedirectToAction("index");

@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Blog>
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Blogs</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-area="admin" asp-controller="home" asp-action="index">Dashboard</a></li>
+        <li class="breadcrumb-item active">Blogs</li>
+    </ol>
+    <a asp-controller="blog" asp-action="create" class="btn btn-outline-primary mb-3">Create Blog</a>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Blogs Table
+        </div>
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Author</th>
+                        <th>Image</th>
+                        <th>Created At</th>
+                        <th>Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Blog blog in Model)
+                    {
+                        <tr>
+                            <td>@blog.Title</td>
+                            <td>@Html.Raw(blog.Description)</td>
+                            <td>@blog.User.UserName</td>
+                            <td>
+                                <img width="50" height="50" src="~/assets/img/blog/@blog.Image" />
+                            </td>
+                            <td>@blog.CreatedAt.ToShortDateString()</td>
+                            <td>
+                                @if (blog.User.UserName == User.Identity.Name)
+                                {
+                                    <a asp-controller="blog" asp-action="update" asp-route-id="@blog.Id" class="btn btn-info">update</a>
+                                    <a asp-controller="blog" asp-action="delete" asp-route-id="@blog.Id" class="btn btn-info">delete</a>
+                                }
+                                else
+                                {
+                                    <p>There is nothing you can do.</p>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -11,7 +11,7 @@ public class Blog : BaseEntity
     public string Description { get; set; }
     public string? Image { get; set; }
     [NotMapped]
-    public IFormFile Photo { get; set; }
-    public string UserId { get; set; }
-    public AppUser User { get; set; }
+    public IFormFile? Photo { get; set; }
+    public string? UserId { get; set; }
+    public AppUser? User { get; set; }
 }
