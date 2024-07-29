@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace Juan.Controllers;
 
-[Authorize(Roles = "memeber")]
+[Authorize(Roles = "memeber"), AllowAnonymous]
 public class WishlistController : Controller
 {
     private readonly JuanDbContext _context;

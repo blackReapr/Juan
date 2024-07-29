@@ -1,6 +1,7 @@
 ﻿using Juan.Data;
 using Juan.Models;
 using Juan.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +24,11 @@ public class DefaultAuthentication : Controller
         _role = role;
     }
 
-    public IActionResult Register() => View();
+    public IActionResult Register()
+    {
+        if (User.Identity.IsAuthenticated) return RedirectToAction("index", "home", _role == "admin" ? "admin" : "");
+        return View();
+    }
 
     [HttpPost, AutoValidateAntiforgeryToken]
     public async Task<IActionResult> Register(RegisterVM registerVM)
@@ -54,7 +59,11 @@ public class DefaultAuthentication : Controller
 
         return RedirectToAction(nameof(Login));
     }
-    public IActionResult Login() => View();
+    public IActionResult Login()
+    {
+        if (User.Identity.IsAuthenticated) return RedirectToAction("index", "home", _role == "admin" ? "admin" : "");
+        return View();
+    }
 
     [HttpPost, AutoValidateAntiforgeryToken]
     public async Task<IActionResult> Login(LoginVM loginVM, string? returnUrl)

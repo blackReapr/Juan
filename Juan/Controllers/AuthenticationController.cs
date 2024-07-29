@@ -1,11 +1,8 @@
 ﻿using Juan.Data;
 using Juan.Helpers;
 using Juan.Models;
-using Juan.ViewModels;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+
 
 namespace Juan.Controllers;
 

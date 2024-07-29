@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Juan.Areas.Admin.Controllers;
 
-[Area("admin")]
+[Area("Admin")]
 public class AuthenticationController : DefaultAuthentication
 {
     public AuthenticationController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JuanDbContext context) : base(userManager, signInManager, context, "admin") { }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Juan.Controllers;
 
-[Authorize(Roles = "memeber")]
+[Authorize(Roles = "memeber"), AllowAnonymous]
 public class ReviewController : Controller
 {
     private readonly JuanDbContext _context;
