@@ -1,11 +1,12 @@
 ﻿using Juan.Data;
 using Juan.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Juan.Areas.Admin.Controllers;
 
-[Area("admin")]
+[Area("admin"), Authorize(Roles = "admin")]
 public class SubscribeController : Controller
 {
     private readonly JuanDbContext _context;

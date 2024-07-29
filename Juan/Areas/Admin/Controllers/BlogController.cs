@@ -2,13 +2,14 @@
 using Juan.Extensions;
 using Juan.Helpers;
 using Juan.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Juan.Areas.Admin.Controllers;
 
-[Area("admin")]
+[Area("admin"), Authorize(Roles = "admin")]
 public class BlogController : Controller
 {
     private readonly JuanDbContext _context;

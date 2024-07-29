@@ -1,10 +1,12 @@
 ﻿using Juan.Data;
 using Juan.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Juan.Controllers;
 
+[Authorize(Roles = "memeber")]
 public class ProductController : Controller
 {
     private readonly JuanDbContext _context;

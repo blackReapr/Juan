@@ -6,5 +6,6 @@ namespace Juan.Interfaces
     {
         Task<IEnumerable<CartVM>> GetCartAsync();
         Task UpdateWishlistAsync();
+        Task<IDictionary<string, string>> GetSettingsAsync();
     }
 }

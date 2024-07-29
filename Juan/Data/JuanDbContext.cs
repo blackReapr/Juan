@@ -1,6 +1,7 @@
 ﻿using Juan.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Configuration;
 
 namespace Juan.Data;
 
@@ -26,6 +27,7 @@ public class JuanDbContext : IdentityDbContext<AppUser>
     public DbSet<Tag> Tags { get; set; }
     public DbSet<BlogTag> BlogTags { get; set; }
     public DbSet<Announcement> Announcements { get; set; }
+    public DbSet<Setting> Settings { get; set; }
     public JuanDbContext(DbContextOptions options) : base(options) { }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

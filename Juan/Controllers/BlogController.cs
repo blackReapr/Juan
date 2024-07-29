@@ -1,11 +1,13 @@
 ﻿using Juan.Data;
 using Juan.Models;
 using Juan.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Juan.Controllers;
 
+[Authorize(Roles = "memeber")]
 public class BlogController : Controller
 {
     private readonly JuanDbContext _context;

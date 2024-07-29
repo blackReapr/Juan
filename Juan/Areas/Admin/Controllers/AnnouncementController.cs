@@ -1,15 +1,14 @@
 ﻿using Juan.Data;
-using Juan.Data.Migrations;
-using Juan.Helpers;
 using Juan.Interfaces;
 using Juan.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Juan.Areas.Admin.Controllers;
 
-[Area("admin")]
+[Area("admin"), Authorize(Roles = "admin")]
 public class AnnouncementController : Controller
 {
     private readonly JuanDbContext _context;

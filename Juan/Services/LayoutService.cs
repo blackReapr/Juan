@@ -3,7 +3,6 @@ using Juan.Helpers;
 using Juan.Interfaces;
 using Juan.Models;
 using Juan.ViewModels;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -88,11 +87,11 @@ public class LayoutService : ILayoutService
         }
         else
         {
-            var wishlistProducts = _context.Wishlists.Include(c => c.Product).Where(c => c.User.NormalizedUserName == _httpContextAccessor.HttpContext.User.Identity.Name.ToUpperInvariant());
-            List<WishlistVM> wishlist = new List<WishlistVM>();
+            IEnumerable<Wishlist> wishlistProducts = await _context.Wishlists.Include(c => c.Product).Where(c => c.User.NormalizedUserName == _httpContextAccessor.HttpContext.User.Identity.Name.ToUpperInvariant()).ToListAsync();
+            List<WishlistVM> wishlist = new();
             foreach (var wishlistProduct in wishlistProducts)
             {
-                var wishlistVM = new WishlistVM()
+                WishlistVM wishlistVM = new()
                 {
                     Id = wishlistProduct.ProductId,
                     Name = wishlistProduct.Product.Name,
@@ -107,4 +106,5 @@ public class LayoutService : ILayoutService
         }
     }
 
+    public async Task<IDictionary<string, string>> GetSettingsAsync() => await _context.Settings.ToDictionaryAsync(s => s.Key, s => s.Value);
 }
