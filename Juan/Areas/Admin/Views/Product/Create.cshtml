@@ -1,0 +1,128 @@
+﻿@model Product
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Product Form</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-area="admin" asp-controller="home" asp-action="index">Dashboard</a></li>
+        <li class="breadcrumb-item active">Product Create</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Create Product
+        </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label asp-for="@Model.Name"></label>
+                    <input asp-for="@Model.Name" class="form-control" placeholder="Enter name">
+                    <span asp-validation-for="@Model.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Description"></label>
+                    <textarea asp-for="@Model.Description" class="form-control" placeholder="Enter description"></textarea>
+                    <span asp-validation-for="@Model.Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.DetailedDescription"></label>
+                    <input asp-for="@Model.DetailedDescription" class="form-control">
+                    <span asp-validation-for="@Model.DetailedDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Price"></label>
+                    <input asp-for="@Model.Price" class="form-control" placeholder="Enter price">
+                    <span asp-validation-for="@Model.Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.DiscountPrice"></label>
+                    <input asp-for="@Model.DiscountPrice" class="form-control" placeholder="Enter discount price">
+                    <span asp-validation-for="@Model.DiscountPrice" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Count"></label>
+                    <input asp-for="@Model.Count" class="form-control" placeholder="Enter count">
+                    <span asp-validation-for="@Model.Count" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.MainPhoto"></label>
+                    <input asp-for="@Model.MainPhoto" class="form-control">
+                    <span asp-validation-for="@Model.MainPhoto" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.Photos"></label>
+                    <input asp-for="@Model.Photos" class="form-control">
+                    <span asp-validation-for="@Model.Photos" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="@Model.IsNew"></label>
+                    <input asp-for="@Model.IsNew" class="form-control" placeholder="Enter count">
+                </div>
+                <div class="form-group">
+                    <label>Colors</label>
+                    <select asp-for="@Model.ColorIds">
+                        @foreach (Color color in ViewBag.Colors)
+                        {
+                            <option value="@color.Id">@color.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="@Model.ColorIds" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Categories</label>
+                    <select asp-for="@Model.CategoryIds">
+                        @foreach (Category category in ViewBag.Categories)
+                        {
+                            <option value="@category.Id">@category.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="@Model.CategoryIds" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Sizes</label>
+                    <select asp-for="@Model.SizeIds">
+                        @foreach (Size size in ViewBag.Sizes)
+                        {
+                            <option value="@size.Id">@size.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="@Model.SizeIds" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script type="importmap">
+    {
+        "imports": {
+            "ckeditor5": "../../assets/vendor/ckeditor5.js",
+            "ckeditor5/": "../../assets/vendor/"
+        }
+    }
+</script>
+<script type="module">
+    import {
+        ClassicEditor,
+        Essentials,
+        Paragraph,
+        Bold,
+        Italic,
+        Font
+    } from 'ckeditor5';
+
+    ClassicEditor
+        .create(document.querySelector('#DetailedDescription'), {
+            plugins: [Essentials, Paragraph, Bold, Italic, Font],
+            toolbar: [
+                'undo', 'redo', '|', 'bold', 'italic', '|',
+                'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor'
+            ]
+        })
+        .then(editor => {
+            window.editor = editor;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>

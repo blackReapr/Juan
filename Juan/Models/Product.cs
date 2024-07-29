@@ -23,9 +23,15 @@ public class Product : BaseEntity
     public IFormFile? MainPhoto { get; set; }
     [NotMapped]
     public IFormFile[]? Photos { get; set; }
-    public List<ProductSize> ProductSizes { get; set; }
-    public List<ProductColor> ProductColors { get; set; }
-    public List<Review> Reviews { get; set; }
-    public List<ProductCategory> ProductCategories { get; set; }
-    public List<Wishlist> Wishlists { get; set; }
+    public List<ProductSize>? ProductSizes { get; set; }
+    public List<ProductColor>? ProductColors { get; set; }
+    public List<Review>? Reviews { get; set; }
+    public List<ProductCategory>? ProductCategories { get; set; }
+    public List<Wishlist>? Wishlists { get; set; }
+    [NotMapped]
+    public List<int>? ColorIds { get; set; }
+    [NotMapped]
+    public List<int>? CategoryIds { get; set; }
+    [NotMapped]
+    public List<int>? SizeIds { get; set; }
 }

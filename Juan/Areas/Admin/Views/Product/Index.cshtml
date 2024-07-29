@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Product>
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Products</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-area="admin" asp-controller="home" asp-action="index">Dashboard</a></li>
+        <li class="breadcrumb-item active">Products</li>
+    </ol>
+    <a asp-controller="blog" asp-action="create" class="btn btn-outline-primary mb-3">Create Product</a>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Products Table
+        </div>
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Colors</th>
+                        <th>Sizes</th>
+                        <th>Image</th>
+                        <th>Created At</th>
+                        <th>Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Product product in Model)
+                    {
+                        <tr>
+                            <td>@product.Name</td>
+                            <td>@product.Description</td>
+                            <td>@string.Join(",", product.ProductColors.Select(pc => pc.Color.Name))</td>
+                            <td>@string.Join(",", product.ProductSizes.Select(pc => pc.Size.Name))</td>
+                            <td>
+                                <img width="50" height="50" src="~/assets/img/product/@product.MainImage" />
+                            </td>
+                            <td>@product.CreatedAt.ToShortDateString()</td>
+                            <td>
+                                <a asp-controller="product" asp-action="update" asp-route-id="@product.Id" class="btn btn-info">update</a>
+                                <a asp-controller="product" asp-action="delete" asp-route-id="@product.Id" class="btn btn-info">delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
