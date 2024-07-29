@@ -25,4 +25,5 @@ public class AppUser : IdentityUser
     [AllowNull]
     public int? CouponId { get; set; }
     public Coupon? Coupon { get; set; }
+    public string? ClientId { get; set; }
 }

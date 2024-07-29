@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Order>
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Orders</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-area="admin" asp-controller="home" asp-action="index">Dashboard</a></li>
+        <li class="breadcrumb-item active">Blogs</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Orders Table
+        </div>
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>Order Id</th>
+                        <th>Recipent</th>
+                        <th>Status</th>
+                        <th>Ordered At</th>
+                        <th>Settings</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Order order in Model)
+                    {
+                        <tr>
+                            <td>@order.Id</td>
+                            <td>@order.User.UserName</td>
+                            <td>@order.Status</td>
+                            <td>@order.CreatedAt.ToShortDateString()</td>
+                            <td>
+                                <a asp-action="updatestatus" asp-route-id="@order.Id">Update status</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

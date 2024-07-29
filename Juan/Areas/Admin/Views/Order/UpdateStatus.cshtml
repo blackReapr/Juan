@@ -1,0 +1,40 @@
+﻿@using Juan.Enums
+@model Order
+<div class="container-fluid px-4">
+    <h1 class="mt-4">Create Form</h1>
+    <ol class="breadcrumb mb-4">
+        <li class="breadcrumb-item"><a asp-area="admin" asp-controller="home" asp-action="index">Dashboard</a></li>
+        <li class="breadcrumb-item active">Update order status</li>
+    </ol>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Update order status
+        </div>
+        <div class="card-body">
+            <form method="post">
+                <div class="form-group">
+                    <label for="@StatusEnum.Approved">@StatusEnum.Approved</label>
+                    <input id="@StatusEnum.Approved" type="radio" name="status" value="@StatusEnum.Approved" />
+                </div>
+                <div class="form-group">
+                    <label for="@StatusEnum.Delivered">@StatusEnum.Delivered</label>
+                    <input id="@StatusEnum.Delivered" type="radio" name="status" value="@StatusEnum.Delivered" />
+                </div>
+                <div class="form-group">
+                    <label for="@StatusEnum.Declined">@StatusEnum.Declined</label>
+                    <input id="@StatusEnum.Declined" type="radio" name="status" value="@StatusEnum.Declined" />
+                </div>
+                <div class="form-group">
+                    <label for="@StatusEnum.OnHold">@StatusEnum.OnHold</label>
+                    <input id="@StatusEnum.OnHold" type="radio" name="status" value="@StatusEnum.OnHold" />
+                </div>
+                <div class="form-group">
+                    <label for="@StatusEnum.Pending">@StatusEnum.Pending</label>
+                    <input id="@StatusEnum.Pending" type="radio" name="status" value="@StatusEnum.Pending" />
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

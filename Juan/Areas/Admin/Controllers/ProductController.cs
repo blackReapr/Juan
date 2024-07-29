@@ -2,11 +2,13 @@
 using Juan.Extensions;
 using Juan.Helpers;
 using Juan.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Juan.Areas.Admin.Controllers;
 
+[Area("admin"), Authorize(Roles = "admin")]
 public class ProductController : Controller
 {
     private readonly JuanDbContext _context;

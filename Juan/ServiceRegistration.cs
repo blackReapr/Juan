@@ -19,6 +19,7 @@ public static class ServiceRegistration
         .AddInterceptors(sp.GetRequiredService<Interceptor>()));
         services.AddControllersWithViews();
         services.AddSession();
+        services.AddSignalR();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<ILayoutService, LayoutService>();
         services.AddHttpClient<IZipCodeValidataionService, ZipCodeValidataionService>();

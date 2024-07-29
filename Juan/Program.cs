@@ -1,4 +1,5 @@
 using Juan;
+using Juan.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,8 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 app.UseRouting();
+
+app.MapHub<StatusHub>("/statushub");
 
 app.UseAuthorization();
 
