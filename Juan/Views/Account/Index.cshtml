@@ -38,7 +38,6 @@
                                     Dashboard
                                 </a>
                                 <a href="#orders" data-toggle="tab"><i class="fa fa-cart-arrow-down"></i> Orders</a>
-                                <a href="#download" data-toggle="tab"><i class="fa fa-cloud-download"></i> Download</a>
                                 <a href="#address-edit" data-toggle="tab"><i class="fa fa-map-marker"></i> address</a>
                                 <a href="#account-info" data-toggle="tab"><i class="fa fa-user"></i> Account Details</a>
                                 <a asp-controller="authentication" asp-action="logout"><i class="fa fa-sign-out"></i> Logout</a>
@@ -84,7 +83,10 @@
                                                                 <td>@order.CreatedAt.ToShortDateString()</td>
                                                                 <td>@order.Status</td>
                                                                 <td>$@(((order.OrderItems.Sum(oi => order.DiscountRate == 0 ? oi.Price * oi.Count : oi.Price * oi.Count * (100 - order.DiscountRate) / 100)) + (order.Shipping == ShippingEnum.FlatRate ? 70 : 0)).ToString("0.00"))</td>
-                                                                <td><a href="cart.html" class="btn">View</a></td>
+                                                                <td>
+                                                                    <a asp-action="sendemail" asp-route-id="@order.Id" class="btn">Send Receipt via Email</a>
+                                                                    <a asp-action="downloadorder" asp-route-id="@order.Id" class="btn">Download</a>
+                                                                </td>
                                                             </tr>
                                                         }
                                                     </tbody>
@@ -94,39 +96,6 @@
                                             {
                                                 <h3 class="text-center">You do not have any orders</h3>
                                             }
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- Single Tab Content End -->
-                                <!-- Single Tab Content Start -->
-                                <div class="tab-pane fade" id="download" role="tabpanel">
-                                    <div class="myaccount-content">
-                                        <h3>Downloads</h3>
-                                        <div class="myaccount-table table-responsive text-center">
-                                            <table class="table table-bordered">
-                                                <thead class="thead-light">
-                                                    <tr>
-                                                        <th>Product</th>
-                                                        <th>Date</th>
-                                                        <th>Expire</th>
-                                                        <th>Download</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Haven - Free Real Estate PSD Template</td>
-                                                        <td>Aug 22, 2018</td>
-                                                        <td>Yes</td>
-                                                        <td><a href="#" class="btn "><i class="fa fa-cloud-download"></i> Download File</a></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>HasTech - Profolio Business Template</td>
-                                                        <td>Sep 12, 2018</td>
-                                                        <td>Never</td>
-                                                        <td><a href="#" class="btn "><i class="fa fa-cloud-download"></i> Download File</a></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
                                         </div>
                                     </div>
                                 </div>

@@ -30,6 +30,7 @@ public class HomeController : Controller
         //        IsNew = i % 2 == 0,
         //        Price = i * 15,
         //        DiscountPrice = i * 12,
+        //        DetailedDescription = $"Description {i}"
         //    };
         //    _context.Products.Add(product);
         //    await _context.SaveChangesAsync();
