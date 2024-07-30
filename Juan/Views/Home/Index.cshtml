@@ -174,13 +174,19 @@
                                             <span class="price-regular">$@product.Price.ToString("0.00")</span>
                                         }
                                     </div>
+                                    @if (product.Reviews.Any())
+                                    {
                                     <div class="ratings">
-                                        <span><i class="ion-android-star"></i></span>
-                                        <span><i class="ion-android-star"></i></span>
-                                        <span><i class="ion-android-star"></i></span>
-                                        <span><i class="ion-android-star"></i></span>
-                                        <span><i class="ion-android-star"></i></span>
+                                        @for (int i = 0; i < product.Reviews.Average(r => r.Rating); i++)
+                                        {
+                                            <span class="good"><i class="fa fa-star"></i></span>
+                                        }
+                                        @for (int i = 0; i < 5 - product.Reviews.Average(r => r.Rating); i++)
+                                        {
+                                            <span style="color: #e3e3e3"><i class="fa fa-star"></i></span>
+                                        }
                                     </div>
+                                    }
                                     <div class="product-link-2">
                                         <a asp-controller="wishlist" asp-action="new" asp-route-id="@product.Id" data-toggle="tooltip" title="Wishlist" class="wishlistBtn">
                                             <i class="ion-android-favorite-outline"></i>

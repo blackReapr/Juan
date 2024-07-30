@@ -37,7 +37,7 @@ public class HomeController : Controller
         //}
         IEnumerable<Slider> sliders = await _context.Sliders.AsNoTracking().ToListAsync();
         IEnumerable<Product> products = await _context.Products.AsNoTracking().ToListAsync();
-        IEnumerable<Product> newProducts = await _context.Products.AsNoTracking().Where(p => p.IsNew).ToListAsync();
+        IEnumerable<Product> newProducts = await _context.Products.Include(p => p.Reviews).AsNoTracking().Where(p => p.IsNew).ToListAsync();
         IEnumerable<Blog> blogs = await _context.Blogs.AsNoTracking().Include(b => b.User).ToListAsync();
         HomeVM homeVM = new()
         {

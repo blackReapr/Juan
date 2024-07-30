@@ -37,6 +37,8 @@ public class ProductController : Controller
             .Include(p => p.Reviews)
             .ThenInclude(r => r.User)
             .FirstOrDefaultAsync(x => x.Id == id);
+        IEnumerable<Product> products = await _context.Products.Where(p => p.ProductCategories.Any(pc => product.ProductCategories.Contains(pc))).AsNoTracking().ToListAsync();
+        ViewBag.Products = products;
         if (product == null) return NotFound();
         return View(product);
     }
