@@ -16,15 +16,7 @@ public static class ServiceRegistration
         services.AddDbContext<JuanDbContext>(options =>
                     options.UseSqlServer(configuration.GetConnectionString("Default")));
 
-        services.AddIdentity<AppUser, IdentityRole>(options =>
-        {
-            options.User.RequireUniqueEmail = true;
-            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            options.Lockout.MaxFailedAccessAttempts = 5;
-        })
-        .AddEntityFrameworkStores<JuanDbContext>()
-        .AddDefaultTokenProviders();
-
+        services.AddSession();
         services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -35,11 +27,18 @@ public static class ServiceRegistration
         {
             options.ClientId = configuration["Google:ClientId"];
             options.ClientSecret = configuration["Google:ClientSecret"];
-            options.CallbackPath = new PathString("/signin-google");
         });
+        services.AddIdentity<AppUser, IdentityRole>(options =>
+        {
+            options.User.RequireUniqueEmail = true;
+            options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+            options.Lockout.MaxFailedAccessAttempts = 5;
+        })
+        .AddEntityFrameworkStores<JuanDbContext>()
+        .AddDefaultTokenProviders();
+
 
         services.AddControllersWithViews();
-        services.AddSession();
         services.AddSignalR();
 
         services.AddSingleton<Interceptor>();

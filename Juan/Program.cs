@@ -14,10 +14,9 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseStaticFiles();
 app.UseRouting();
-
+app.UseAuthorization();
 app.MapHub<StatusHub>("/statushub");
 
-app.UseAuthorization();
 
 app.MapControllerRoute(
       name: "areas",
