@@ -89,55 +89,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="product-carousel-4 mbn-50 slick-row-15 slick-arrow-style">
-                    @foreach (Product product in Model.Products)
-                    {
-                        <!-- product single item start -->
-                        <div class="product-item mb-50">
-                            <div class="product-thumb">
-                                <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">
-                                    <img src="~/assets/img/product/@product.MainImage" alt="@product.Name" />
-                                </a>
-                            </div>
-                            <div class="product-content">
-                                <h5 class="product-name">
-                                    <a asp-controller="product" asp-action="detail" asp-route-id="@product.Id">@product.Name</a>
-                                </h5>
-                                @if (product.DiscountPrice > 0)
-                                {
-                                    <div class="price-box">
-                                        <span class="price-regular">$@product.DiscountPrice.ToString("0.00")</span>
-                                        <span class="price-old"><del>$@product.Price.ToString("0.00")</del></span>
-                                    </div>
-                                }
-                                else
-                                {
-                                    <div class="price-box">
-                                        <span class="price-regular">$@product.Price.ToString("0.00")</span>
-                                    </div>
-                                }
-                                <div class="product-action-link">
-                                    <a asp-controller="wishlist" asp-action="new" asp-route-id="@product.Id" data-toggle="tooltip" title="Wishlist" class="wishlistBtn">
-                                        <i class="ion-android-favorite-outline"></i>
-                                    </a>
-                                    <a asp-controller="cart" asp-action="addtocart" asp-route-id="@product.Id" data-toggle="tooltip" title="Add To Cart" class="addToCart">
-                                        <i class="ion-bag"></i>
-                                    </a>
-                                    <a asp-controller="product" asp-action="modal" asp-route-id="@product.Id" class="modalBtn" data-toggle="modal" data-target="#quick_view">
-                                        <span data-toggle="tooltip" title="Quick View">
-                                            <i class="ion-ios-eye-outline"></i>
-                                        </span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- product single item start -->
-                    }
-                </div>
-            </div>
-        </div>
+        @await Component.InvokeAsync("Products", Model.Products)
     </div>
 </section>
 <!-- our product area end -->

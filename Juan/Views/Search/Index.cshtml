@@ -1,0 +1,10 @@
+﻿@model IEnumerable<Product>
+<h2 class="text-center">Results for: @ViewBag.Query</h2>
+@if (Model.Any())
+{
+    @await Component.InvokeAsync("Products", Model)
+}
+else
+{
+    <h3 class="mt-5 mb-5 text-center">No result found</h3>
+}

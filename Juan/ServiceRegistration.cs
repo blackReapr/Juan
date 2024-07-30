@@ -33,6 +33,7 @@ public static class ServiceRegistration
             options.User.RequireUniqueEmail = true;
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             options.Lockout.MaxFailedAccessAttempts = 5;
+            options.SignIn.RequireConfirmedEmail = true;
         })
         .AddEntityFrameworkStores<JuanDbContext>()
         .AddDefaultTokenProviders();

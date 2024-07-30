@@ -1,10 +1,12 @@
 ﻿using Juan.Data;
+using Juan.Interfaces;
 using Juan.Models;
 using Juan.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using Newtonsoft.Json;
 
 namespace Juan.Helpers;
@@ -14,14 +16,16 @@ public class DefaultAuthentication : Controller
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
     private readonly JuanDbContext _context;
+    private readonly IEmailService _emailService;
     private readonly string _role;
 
-    public DefaultAuthentication(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JuanDbContext context, string role)
+    public DefaultAuthentication(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JuanDbContext context, string role, IEmailService emailService)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _context = context;
         _role = role;
+        _emailService = emailService;
     }
 
     public IActionResult Register()
@@ -46,6 +50,22 @@ public class DefaultAuthentication : Controller
         }
         await _userManager.AddToRoleAsync(user, _role);
 
+
+        string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        string link = Url.Action(nameof(VerifyEmail), "Account", new { email = user.Email, token = token }, Request.Scheme, Request.Host.ToString());
+
+        string body = "";
+        using (StreamReader stream = new StreamReader("wwwroot/templates/verifyEmail.html"))
+        {
+            body = stream.ReadToEnd();
+        };
+        body = body.Replace("{{link}}", link);
+        body = body.Replace("{{username}}", user.UserName);
+
+        _emailService.SendEmail(user.Email, "Verify Email", body);
+
+
+
         if (registerVM.Subscribe)
         {
             Subscribe subscribe = new()
@@ -59,6 +79,16 @@ public class DefaultAuthentication : Controller
 
         return RedirectToAction(nameof(Login));
     }
+
+    public async Task<IActionResult> VerifyEmail(string token, string email)
+    {
+        AppUser? appUser = await _userManager.FindByEmailAsync(email);
+        if (appUser == null) return NotFound();
+        await _userManager.ConfirmEmailAsync(appUser, token);
+        return RedirectToAction(nameof(Login));
+    }
+
+
     public IActionResult Login()
     {
         if (User.Identity.IsAuthenticated) return RedirectToAction("index", "home", _role == "admin" ? "admin" : "");
@@ -135,4 +165,67 @@ public class DefaultAuthentication : Controller
         }
         return RedirectToAction("login", "authentication", "admin");
     }
+
+
+
+    [HttpPost, AutoValidateAntiforgeryToken]
+    public async Task<IActionResult> ForgotPassword(string email)
+    {
+        AppUser? appUser = await _userManager.FindByEmailAsync(email);
+        if (appUser == null)
+        {
+            ModelState.AddModelError("Error1", "User not found");
+            return View();
+        };
+
+        string token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
+        string link = Url.Action(nameof(ResetPassword), "Account", new { email = appUser.Email, token = token }, Request.Scheme, Request.Host.ToString());
+
+        string body = "";
+        using (StreamReader stream = new StreamReader("wwwroot/templates/forgotPassword.html"))
+        {
+            body = stream.ReadToEnd();
+        };
+        body = body.Replace("{{link}}", link);
+        body = body.Replace("{{username}}", appUser.UserName);
+
+        _emailService.SendEmail(appUser.Email, "Reset Password", body);
+
+        return View();
+    }
+
+    public async Task<IActionResult> ResetPassword(string email, string token)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null) return NotFound();
+        bool result = await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", token);
+        if (!result) return BadRequest();
+        return View();
+    }
+
+    [HttpPost, AutoValidateAntiforgeryToken]
+    public async Task<IActionResult> ResetPassword(string email, string token, ResetPasswordVM resetPasswordVM)
+    {
+        AppUser? appUser = await _userManager.FindByEmailAsync(email);
+        if (!ModelState.IsValid) return View();
+        if (appUser == null)
+        {
+            ModelState.AddModelError("Error1", "User not found");
+            return View(resetPasswordVM);
+        };
+
+        var result = await _userManager.ResetPasswordAsync(appUser, token, resetPasswordVM.Password);
+        if (!result.Succeeded)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+            return View(resetPasswordVM);
+        }
+        await _userManager.UpdateSecurityStampAsync(appUser);
+
+        return RedirectToAction("login");
+    }
+
 }

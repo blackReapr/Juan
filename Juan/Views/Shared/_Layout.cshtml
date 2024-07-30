@@ -50,9 +50,9 @@
             <div class="off-canvas-inner">
                 <!-- search box start -->
                 <div class="search-box-offcanvas">
-                    <form>
-                        <input type="text" placeholder="Search Here..." />
-                        <button class="search-btn">
+                    <form action="/search" method="get">
+                        <input name="query" type="text" placeholder="Search Here..." />
+                        <button type="submit" class="search-btn">
                             <i class="ion-ios-search-strong"></i>
                         </button>
                     </form>
@@ -298,12 +298,13 @@
             </div>
             <div class="container">
                 <div class="offcanvas-search-box">
-                    <form class="d-flex bdr-bottom w-100">
-                        <input type="text" placeholder="Search entire storage here..." />
-                        <button class="search-btn">
+                    @using (@Html.BeginForm("index", "search", FormMethod.Get))
+                    {
+                        <input name="query" type="text" placeholder="Search ..." />
+                        <button class="search-btn" type="submit">
                             <i class="ion-ios-search-strong"></i>search
                         </button>
-                    </form>
+                    }
                 </div>
             </div>
         </div>
