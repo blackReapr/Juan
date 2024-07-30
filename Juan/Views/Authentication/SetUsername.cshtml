@@ -1,0 +1,8 @@
+﻿@model GoogleAuthVM
+
+<form method="post">
+    <label asp-for="@Model.Username"></label>
+    <input asp-for="@Model.Username" />
+    <span asp-validation-for="@Model.Username"></span>
+    <button type="submit">Set username</button>
+</form>

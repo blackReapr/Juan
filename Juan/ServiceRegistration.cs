@@ -2,6 +2,8 @@
 using Juan.Interfaces;
 using Juan.Models;
 using Juan.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,24 +13,39 @@ public static class ServiceRegistration
 {
     public static void Register(this IServiceCollection services, ConfigurationManager configuration)
     {
-        services.AddSingleton<Interceptor>();
-        services.AddHttpContextAccessor();
-        services.AddDbContext<JuanDbContext>((sp, options) => options
-        .UseSqlServer(configuration
-        .GetConnectionString("Default"))
-        .AddInterceptors(sp.GetRequiredService<Interceptor>()));
-        services.AddControllersWithViews();
-        services.AddSession();
-        services.AddSignalR();
-        services.AddScoped<IEmailService, EmailService>();
-        services.AddScoped<ILayoutService, LayoutService>();
-        services.AddHttpClient<IZipCodeValidataionService, ZipCodeValidataionService>();
+        services.AddDbContext<JuanDbContext>(options =>
+                    options.UseSqlServer(configuration.GetConnectionString("Default")));
+
         services.AddIdentity<AppUser, IdentityRole>(options =>
         {
             options.User.RequireUniqueEmail = true;
             options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
             options.Lockout.MaxFailedAccessAttempts = 5;
-            //options.SignIn.RequireConfirmedEmail = true;
-        }).AddEntityFrameworkStores<JuanDbContext>().AddDefaultTokenProviders();
+        })
+        .AddEntityFrameworkStores<JuanDbContext>()
+        .AddDefaultTokenProviders();
+
+        services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+        })
+        .AddCookie()
+        .AddGoogle(options =>
+        {
+            options.ClientId = configuration["Google:ClientId"];
+            options.ClientSecret = configuration["Google:ClientSecret"];
+            options.CallbackPath = new PathString("/signin-google");
+        });
+
+        services.AddControllersWithViews();
+        services.AddSession();
+        services.AddSignalR();
+
+        services.AddSingleton<Interceptor>();
+        services.AddHttpContextAccessor();
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<ILayoutService, LayoutService>();
+        services.AddHttpClient<IZipCodeValidataionService, ZipCodeValidataionService>();
     }
 }
