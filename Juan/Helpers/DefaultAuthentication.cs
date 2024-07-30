@@ -52,7 +52,7 @@ public class DefaultAuthentication : Controller
 
 
         string token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        string link = Url.Action(nameof(VerifyEmail), "Account", new { email = user.Email, token = token }, Request.Scheme, Request.Host.ToString());
+        string link = Url.Action(nameof(VerifyEmail), "Authentication", new { email = user.Email, token = token }, Request.Scheme, Request.Host.ToString());
 
         string body = "";
         using (StreamReader stream = new StreamReader("wwwroot/templates/verifyEmail.html"))
@@ -179,7 +179,7 @@ public class DefaultAuthentication : Controller
         };
 
         string token = await _userManager.GeneratePasswordResetTokenAsync(appUser);
-        string link = Url.Action(nameof(ResetPassword), "Account", new { email = appUser.Email, token = token }, Request.Scheme, Request.Host.ToString());
+        string link = Url.Action(nameof(ResetPassword), "Authentication", new { email = appUser.Email, token = token }, Request.Scheme, Request.Host.ToString());
 
         string body = "";
         using (StreamReader stream = new StreamReader("wwwroot/templates/forgotPassword.html"))

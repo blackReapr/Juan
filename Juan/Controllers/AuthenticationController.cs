@@ -17,7 +17,7 @@ public class AuthenticationController : DefaultAuthentication
     private readonly UserManager<AppUser> _userManager;
     private readonly IEmailService _emailService;
 
-    public AuthenticationController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JuanDbContext context, string role, IEmailService emailService) : base(userManager, signInManager, context, role, emailService)
+    public AuthenticationController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, JuanDbContext context, IEmailService emailService) : base(userManager, signInManager, context, "member", emailService)
     {
         _signInManager = signInManager;
         _emailService = emailService;
@@ -78,7 +78,7 @@ public class AuthenticationController : DefaultAuthentication
                     body = body.Replace("{{username}}", user.UserName);
 
                     _emailService.SendEmail(user.Email, "Verify Email", body);
-                    return RedirectToAction("login", "account");
+                    return RedirectToAction("login", "authentication");
                 }
             }
         }
