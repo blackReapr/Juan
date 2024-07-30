@@ -28,7 +28,7 @@ public static partial class Extension
             return errors;
         }
         if (!formFile.IsImage()) errors.Add("Invalid file type");
-        if (!formFile.DoesSizeExceed(size)) errors.Add("File size is too large");
+        if (formFile.DoesSizeExceed(size)) errors.Add("File size is too large");
         return errors;
     }
 }

@@ -56,38 +56,25 @@ public class AccountController : Controller
         ViewBag.Orders = orders;
         if (!ModelState.IsValid) return View(accountVM);
 
-        IEnumerable<string> errors = accountVM.Profile.VerifyFile();
-        if (errors.Any())
+        if (accountVM.Profile != null)
         {
-            foreach (string error in errors) ModelState.AddModelError("Profile", error);
-            return View(accountVM);
-        }
-
-        string filename = await accountVM.Profile.SaveFileAsync();
-        string? oldFile = appUser.Profile == "default.jpg" ? null : appUser.Profile;
-
-        bool isPasswordCorrect = await _userManager.CheckPasswordAsync(appUser, accountVM.CurrentPassword);
-        if (!isPasswordCorrect)
-        {
-            ModelState.AddModelError("Error", "Incorrect Password");
-            return View(accountVM);
-        }
-
-        if (accountVM.Password != null)
-        {
-            IdentityResult result = await _userManager.ChangePasswordAsync(appUser, accountVM.CurrentPassword, accountVM.Password);
-            if (!result.Succeeded)
+            IEnumerable<string> errors = accountVM.Profile.VerifyFile();
+            if (errors.Any())
             {
-                foreach (var error in result.Errors) ModelState.AddModelError("Error", error.Description);
+                foreach (string error in errors) ModelState.AddModelError("Profile", error);
                 return View(accountVM);
             }
+
+                string filename = await accountVM.Profile.SaveFileAsync();
+                appUser.Profile = filename;
         }
+
+        string? oldFile = appUser.Profile == "default.jpg" ? null : appUser.Profile;
 
         appUser.FirstName = accountVM.FirstName;
         appUser.LastName = accountVM.LastName;
         appUser.Email = accountVM.Email;
         appUser.UserName = accountVM.UserName;
-        appUser.Profile = filename;
 
         IdentityResult updateResult = await _userManager.UpdateAsync(appUser);
         if (!updateResult.Succeeded)
@@ -96,9 +83,10 @@ public class AccountController : Controller
             return View(accountVM);
         }
 
-        if (oldFile != null) DeleteFile.Delete(filename, "users");
+        if (oldFile != null) DeleteFile.Delete(oldFile, "users");
 
-        await _signInManager.SignInAsync(appUser, true);
+        AppUser? updated = await _userManager.FindByNameAsync(accountVM.UserName);
+        await _signInManager.SignInAsync(updated, true);
         return View();
     }
 
